@@ -244,8 +244,8 @@ button:disabled {
   <h1 class="webpage-title">YES Moderation PDF Merger</h1>
 
   <p>
-    Upload a student's YES documents, assign each file to a section,
-    enter the grades, and create one moderation portfolio.
+    Upload the student's title page first, followed by the YES documents. The first uploaded PDF or image
+    will be used as the title page at the start of the final portfolio. Assign the remaining documents to sections.
   </p>
 
   <h2>1. Student details</h2>
@@ -392,6 +392,50 @@ button:disabled {
 
 <script>
 
+        </label>
+    </div>
+
+    <div class="comment-card">
+      <label>Challenge 3 — Promotion and Marketing Mark (out of 20)
+        <input id="mark3" type="number" min="0" max="20" step="1" placeholder="Enter mark out of 20">
+      </label>
+      <label class="comment-label">YES Comments
+        <textarea id="comments3" rows="5" placeholder="Paste YES comments for Challenge 3 here..."></textarea>
+      </label>
+    </div>
+
+    <div class="comment-card">
+      <label>Challenge 4 — Achievements and Reflections Mark (out of 30)
+        <input id="mark4" type="number" min="0" max="30" step="1" placeholder="Enter mark out of 30">
+      </label>
+      <label class="comment-label">YES Comments
+        <textarea id="comments4" rows="5" placeholder="Paste YES comments for Challenge 4 here..."></textarea>
+      </label>
+    </div>
+  </div>
+
+  <h2>5. Final document order</h2>
+
+  <div class="preview">
+    <ol id="preview"></ol>
+  </div>
+
+  <h2>6. Generate moderation portfolio</h2>
+
+  <label>Output filename
+    <input id="outputName" value="YES_Moderation_Portfolio">
+  </label>
+
+  <div class="actions">
+    <button class="primary" id="merge">
+      Generate Moderation PDF
+    </button>
+  </div>
+
+  <p id="status" class="status" role="status"></p>
+</main>
+
+<script>
   const SECTION_GROUPS = [
   {
     title: "Business Planning",
@@ -456,6 +500,10 @@ input.addEventListener("change", () => {
   addFiles(input.files);
   input.value = "";
 });
+
+function getTitlePageItem() {
+  return files.find(item => /\.(pdf|png|jpe?g)$/i.test(item.file.name));
+}
 
 function guessSection(name) {
   const n = name.toLowerCase().replace(/[_-]+/g, " ");
@@ -557,7 +605,7 @@ function fileTypeLabel(file) {
   return "Unknown format";
 }
 
-function render() {
+  function render() {
   const container = $("files");
   container.replaceChildren();
 
@@ -627,7 +675,10 @@ function renderPreview() {
     list.appendChild(li);
   }
 
-  add("Cover page: Student and company details");
+  const titlePageFile = getTitlePageItem();
+  add(titlePageFile
+    ? "Title page first: " + titlePageFile.file.name
+    : "Upload the title page PDF or image first.");
 
   SECTION_GROUPS.forEach(group => {
     add(group.title);
@@ -950,17 +1001,24 @@ function addCommentPages(pdf, title, markValue, maxMark, commentText, font, bold
     }
   }
 
-  const assigned = files.filter(f => f.section);
+  // The first uploaded PDF/image is the title page.
+  // It is inserted first and excluded from the normal section sequence.
+  const titlePageItem = getTitlePageItem();
+
+  const assigned = files.filter(
+    item => item.section && item !== titlePageItem
+  );
 
   if (!assigned.length) {
     throw new Error(
-      "Assign at least one file to a section before generating."
+      "Assign at least one non-title-page file to a section before generating."
     );
   }
 
-  // Check PowerPoint files before starting.
-  const pptxFiles = assigned.filter(item =>
-    item.file.name.toLowerCase().endsWith(".pptx")
+  // PowerPoint files must be converted to PDF first.
+  const pptxFiles = files.filter(item =>
+    item.file.name.toLowerCase().endsWith(".pptx") &&
+    (item.section || item === titlePageItem)
   );
 
   if (pptxFiles.length) {
@@ -982,33 +1040,63 @@ function addCommentPages(pdf, title, markValue, maxMark, commentText, font, bold
     PDFLib.StandardFonts.HelveticaBold
   );
 
-  // TITLE PAGE:
-  // Use the first page of an uploaded PDF whose filename contains "Title Page".
-  const titlePageItem = files.find(item =>
-    item.file.name.toLowerCase().endsWith(".pdf") &&
-    /title[ _-]*page/i.test(item.file.name)
-  );
+  // TITLE PAGE
+  // PDF title pages contribute all their pages.
+  // Image title pages are placed proportionally on an A4 page.
+  // The title page is placed before all section divider pages.
+  if (titlePageItem) {
+    const titleName = titlePageItem.file.name.toLowerCase();
+    const titleBytes = await titlePageItem.file.arrayBuffer();
 
-  if (!titlePageItem) {
-    throw new Error(
-      'Please upload the title page PDF with "Title Page" in its filename ' +
-      '(for example, Student Name - Title Page.pdf). Its first page will ' +
-      "become page 1 of the final portfolio."
-    );
+    if (titleName.endsWith(".pdf")) {
+      const titleSource = await PDFLib.PDFDocument.load(titleBytes);
+
+      if (titleSource.getPageCount() < 1) {
+        throw new Error(
+          "The uploaded title page PDF does not contain any pages."
+        );
+      }
+
+      const titlePages = await pdf.copyPages(
+        titleSource,
+        titleSource.getPageIndices()
+      );
+
+      titlePages.forEach(page => pdf.addPage(page));
+    } else {
+      let titleImage;
+
+      if (titleName.endsWith(".png")) {
+        titleImage = await pdf.embedPng(titleBytes);
+      } else {
+        titleImage = await pdf.embedJpg(titleBytes);
+      }
+
+      const pageWidth = 595.28;
+      const pageHeight = 841.89;
+      const margin = 25;
+
+      const scale = Math.min(
+        (pageWidth - margin * 2) / titleImage.width,
+        (pageHeight - margin * 2) / titleImage.height
+      );
+
+      const imageWidth = titleImage.width * scale;
+      const imageHeight = titleImage.height * scale;
+
+      const titlePage = pdf.addPage([
+        pageWidth,
+        pageHeight
+      ]);
+
+      titlePage.drawImage(titleImage, {
+        x: (pageWidth - imageWidth) / 2,
+        y: (pageHeight - imageHeight) / 2,
+        width: imageWidth,
+        height: imageHeight
+      });
+    }
   }
-
-  const titlePageSource = await PDFLib.PDFDocument.load(
-    await titlePageItem.file.arrayBuffer()
-  );
-
-  if (titlePageSource.getPageCount() < 1) {
-    throw new Error(
-      "The uploaded title page PDF does not contain any pages."
-    );
-  }
-
-  const [titlePage] = await pdf.copyPages(titlePageSource, [0]);
-  pdf.addPage(titlePage);
 
   // SECTION HEADINGS AND CONTENT
   for (const group of SECTION_GROUPS) {
@@ -1040,11 +1128,6 @@ function addCommentPages(pdf, title, markValue, maxMark, commentText, font, bold
             pageIndex < pages.length;
             pageIndex++
           ) {
-            // The title page's first page has already been placed at the start.
-            if (item === titlePageItem && pageIndex === 0) {
-              continue;
-            }
-
             const page = pages[pageIndex];
 
             // Add a section label to the first page of the first PDF
@@ -1064,7 +1147,6 @@ function addCommentPages(pdf, title, markValue, maxMark, commentText, font, bold
 
             pdf.addPage(page);
           }
-
         } else if (
           name.endsWith(".png") ||
           name.endsWith(".jpg") ||
