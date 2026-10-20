@@ -263,7 +263,7 @@ y=pageHeight-135;
 if(studentName){page.drawText("Student: "+studentName,{x:margin,y,size:10,font});y-=28}
 if(mark!==""){
 page.drawRectangle({x:margin,y:y-26,width:180,height:38,color:PDFLib.rgb(1,.91,.95),borderColor:PDFLib.rgb(.85,.36,.55),borderWidth:1});
-page.drawText("CHALLENGE MARK: "+mark+" / "+maxMark,{x:margin+12,y:y-3,size:13,font:bold,color:PDFLib.rgb(.59,.16,.34)});
+page.drawText("YES MARK: "+mark+" / "+maxMark,{x:margin+12,y:y-3,size:13,font:bold,color:PDFLib.rgb(.59,.16,.34)});
 y-=58;
 }
 if(text){page.drawText("YES COMMENTS",{x:margin,y,size:11,font:bold,color:PDFLib.rgb(.59,.16,.34)});y-=22}
