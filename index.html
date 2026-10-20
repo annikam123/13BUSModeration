@@ -1,209 +1,240 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>YES Moderation Portfolio Merger</title>
+
 <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 
 <style>
 :root {
-  --pink-50:#fff7fb;
-  --pink-100:#ffe8f1;
-  --pink-200:#f8cddd;
-  --pink-300:#efa9c4;
-  --pink-500:#d85b8a;
-  --pink-600:#bf3f73;
-  --pink-700:#963258;
-  --plum:#493044;
-  --muted:#806d7b;
-  --border:#f0dce6;
+  --pink-50: #fff7fb;
+  --pink-100: #ffe8f1;
+  --pink-200: #f8cddd;
+  --pink-300: #efa9c4;
+  --pink-500: #d85b8a;
+  --pink-600: #bf3f73;
+  --pink-700: #963258;
+  --plum: #493044;
+  --muted: #806d7b;
+  --border: #f0dce6;
+  --white: #ffffff;
 }
 
-* { box-sizing:border-box; }
+* { box-sizing: border-box; }
 
 body {
-  margin:0;
-  padding:28px 16px;
-  font-family:Arial,sans-serif;
-  background:linear-gradient(135deg,#fff6fa,#fdf0f6 48%,#fff9fc);
-  color:var(--plum);
+  margin: 0;
+  padding: 28px 16px;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #fff6fa 0%, #fdf0f6 48%, #fff9fc 100%);
+  color: var(--plum);
 }
 
 main {
-  max-width:900px;
-  margin:auto;
-  padding:30px;
-  background:white;
-  border:1px solid #f6e4ec;
-  border-radius:20px;
-  box-shadow:0 12px 36px #a93c6d12;
+  max-width: 850px;
+  margin: auto;
+  background: var(--white);
+  padding: 30px;
+  border: 1px solid #f6e4ec;
+  border-radius: 20px;
+  box-shadow: 0 12px 36px #a93c6d12;
 }
 
-h1 { margin-top:0; }
+h1 { margin-top: 0; }
 
 h2 {
-  margin-top:30px;
-  padding-bottom:9px;
-  border-bottom:1px solid var(--pink-100);
-  color:var(--pink-700);
-  font-size:19px;
+  font-size: 19px;
+  margin-top: 30px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--pink-100);
+  color: var(--pink-700);
 }
 
-p { color:var(--muted); line-height:1.55; }
+p { color: var(--muted); line-height: 1.55; }
 
 .webpage-title {
-  color:var(--pink-600);
-  text-align:center;
+  color: var(--pink-600);
+  text-align: center;
+  letter-spacing: -0.5px;
+  margin-bottom: 10px;
 }
 
 .field-grid {
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
 }
 
-input,select,textarea,button { font:inherit; }
-
-input,select,textarea {
-  width:100%;
-  margin-top:7px;
-  padding:11px 12px;
-  border:1px solid var(--border);
-  border-radius:9px;
-  background:#fffdfd;
-  color:var(--plum);
-}
+input, select, textarea, button { font: inherit; }
 
 textarea {
-  display:block;
-  resize:vertical;
-  line-height:1.5;
-  font-weight:normal;
+  width: 100%;
+  display: block;
+  margin-top: 7px;
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: #fffdfd;
+  color: var(--plum);
+  resize: vertical;
+  line-height: 1.5;
+  font-weight: normal;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
-input:focus,select:focus,textarea:focus {
-  outline:none;
-  border-color:var(--pink-500);
-  box-shadow:0 0 0 3px #d85b8a1c;
+textarea:focus {
+  outline: none;
+  border-color: var(--pink-500);
+  box-shadow: 0 0 0 3px #d85b8a1c;
 }
+
+.comments-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+input, select {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: #fffdfd;
+  color: var(--plum);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--pink-500);
+  box-shadow: 0 0 0 3px #d85b8a1c;
+}
+
+input::placeholder { color: #b29eab; }
 
 label {
-  display:block;
-  margin-bottom:8px;
-  font-weight:bold;
-  font-size:13px;
-  color:#65475b;
+  display: block;
+  font-weight: bold;
+  font-size: 13px;
+  color: #65475b;
+}
+
+label input {
+  display: block;
+  margin-top: 7px;
+  font-weight: normal;
 }
 
 .drop {
-  margin-top:15px;
-  padding:32px 15px;
-  border:2px dashed var(--pink-300);
-  border-radius:15px;
-  background:var(--pink-50);
-  text-align:center;
-  cursor:pointer;
+  border: 2px dashed var(--pink-300);
+  border-radius: 15px;
+  padding: 32px 15px;
+  text-align: center;
+  cursor: pointer;
+  background: var(--pink-50);
+  margin-top: 15px;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
-.drop:hover,.drop.over {
-  background:var(--pink-100);
-  border-color:var(--pink-600);
+.drop:hover {
+  background: #fff0f6;
+  border-color: var(--pink-500);
 }
 
-.drop strong { color:var(--pink-700); }
+.drop.over {
+  background: var(--pink-100);
+  border-color: var(--pink-600);
+  transform: scale(1.005);
+}
 
-#fileInput { display:none; }
+.drop strong { color: var(--pink-700); }
+#fileInput { display: none; }
 
 .file {
-  display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(180px,1fr) auto;
-  align-items:center;
-  gap:10px;
-  padding:12px 0;
-  border-bottom:1px solid #f5e7ee;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f5e7ee;
 }
 
 .filename {
-  overflow-wrap:anywhere;
-  font-size:14px;
+  overflow-wrap: anywhere;
+  font-size: 14px;
+  color: var(--plum);
 }
 
 .filename small {
-  display:block;
-  margin-top:4px;
-  color:var(--muted);
+  display: block;
+  color: var(--muted);
+  margin-top: 4px;
 }
 
 button {
-  padding:12px 15px;
-  border:0;
-  border-radius:9px;
-  cursor:pointer;
-  font-weight:bold;
+  border: 0;
+  border-radius: 9px;
+  padding: 12px 15px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
 }
 
-button:hover:not(:disabled) { transform:translateY(-1px); }
-button:disabled { opacity:.5; cursor:not-allowed; }
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
 
 .primary {
-  background:var(--pink-600);
-  color:white;
+  background: var(--pink-600);
+  color: white;
+  box-shadow: 0 4px 10px #bf3f7326;
 }
 
-.primary:hover:not(:disabled) { background:var(--pink-700); }
+.primary:hover:not(:disabled) { background: var(--pink-700); }
 
 .secondary {
-  background:var(--pink-100);
-  color:var(--pink-700);
+  background: var(--pink-100);
+  color: var(--pink-700);
 }
 
-.danger {
-  background:#fff0f3;
-  color:#a83252;
-}
+.secondary:hover:not(:disabled) { background: var(--pink-200); }
+
+.danger { background: #fff0f3; color: #a83252; }
+.danger:hover:not(:disabled) { background: #ffdfe7; }
 
 .actions {
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
 }
 
-.actions button { flex:1; }
+.actions button { flex: 1; }
 
-.comments-grid {
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:14px;
-}
-
-.comment-card {
-  padding:15px;
-  border:1px solid var(--pink-100);
-  border-radius:12px;
-  background:#fff9fc;
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .preview {
-  padding:16px;
-  border:1px solid var(--pink-100);
-  border-radius:12px;
-  background:#fff9fc;
+  background: #fff9fc;
+  border: 1px solid var(--pink-100);
+  padding: 16px;
+  border-radius: 12px;
 }
 
-.preview ol { padding-left:23px; }
-.preview li { padding:5px 0; overflow-wrap:anywhere; }
+.preview ol { padding-left: 23px; margin-bottom: 0; }
+.preview li { padding: 5px 0; color: #65475b; }
+.muted { color: var(--muted); font-size: 13px; }
+.status { white-space: pre-wrap; font-size: 14px; color: var(--pink-700); }
 
-.muted { font-size:13px; color:var(--muted); }
-.status { white-space:pre-wrap; color:var(--pink-700); }
-
-@media(max-width:600px) {
-  body { padding:14px 10px; }
-  main { padding:18px; }
-  .field-grid,.comments-grid { grid-template-columns:1fr; }
-  .file { grid-template-columns:1fr; }
+@media(max-width: 600px) {
+  body { padding: 14px 10px; }
+  main { padding: 18px; border-radius: 15px; }
+  .field-grid, .comments-grid { grid-template-columns: 1fr; }
+  .file { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -211,7 +242,11 @@ button:disabled { opacity:.5; cursor:not-allowed; }
 <body>
 <main>
   <h1 class="webpage-title">YES Moderation PDF Merger</h1>
-  <p>Upload student documents, enter challenge marks and feedback, add teacher comments, and create one moderation portfolio.</p>
+
+  <p>
+    Upload a student's YES documents, assign each file to a section,
+    enter the grades, and create one moderation portfolio.
+  </p>
 
   <h2>1. Student details</h2>
 
@@ -225,31 +260,50 @@ button:disabled { opacity:.5; cursor:not-allowed; }
     </label>
   </div>
 
-  <label style="margin-top:12px">Product Description
-    <textarea id="product" rows="2" placeholder="Enter product description"></textarea>
+  <label style="margin-top:12px">
+    Product Description
+    <input id="product" placeholder="Enter product description">
   </label>
 
   <h2>2. Upload files</h2>
 
   <div class="drop" id="drop">
     <div style="font-size:36px">📄</div>
-    <strong>Drag and drop files here</strong>
+    <strong>Drag and drop your files here</strong>
     <p>Or click to browse your computer.</p>
-    <p>Accepted: PDF, PNG, JPG and JPEG. PowerPoint files must first be exported as PDFs.</p>
-    <button type="button" class="secondary" id="browse">Choose files</button>
+    <p>Accepted: PDF, PNG, JPG, JPEG and PPTX</p>
+    <button type="button" class="secondary" id="browse">
+      Choose files
+    </button>
   </div>
 
-  <input id="fileInput" type="file" accept=".pdf,.png,.jpg,.jpeg,.pptx" multiple>
+  <input
+    id="fileInput"
+    type="file"
+    accept=".pdf,.png,.jpg,.jpeg,.pptx,application/pdf,image/png,image/jpeg,application/vnd.openxmlformats-officedocument.presentationml.presentation"
+    multiple
+  >
 
   <h2>Your uploaded files</h2>
-  <p class="muted">Assign each file to its correct section. Files will be included in the order shown below.</p>
+
+  <p class="muted">
+    Select the correct section for each file. Files are sorted into
+    the required moderation order automatically. Unassigned files
+    will not be included in the final portfolio.
+  </p>
+
   <div id="files"></div>
 
   <div class="actions">
     <button class="secondary" id="clear">Clear all files</button>
   </div>
 
-  <h2>3. Grade summary details</h2>
+  <h2>3. Grade entry</h2>
+
+  <p>
+    Enter your grades manually. They will appear in the final PDF.
+    Leave a field blank if you have not decided on that grade yet.
+  </p>
 
   <div class="field-grid">
     <label>Business Plan Grade
@@ -269,69 +323,79 @@ button:disabled { opacity:.5; cursor:not-allowed; }
     <textarea id="teacherComment" rows="5" placeholder="Write the teacher's overall feedback here..."></textarea>
   </label>
 
-  <h2>4. YES challenge marks and comments</h2>
-  <p>Enter each challenge mark and paste the YES comments. These will appear directly after the relevant challenge documents in the PDF.</p>
+  <h2>4. YES comments and feedback</h2>
+
+  <p>
+    Paste the YES feedback/comments for each challenge into the relevant box.
+    Any comments entered here will be added as a clearly labelled page immediately
+    after that challenge's uploaded documents in the final PDF.
+  </p>
 
   <div class="comments-grid">
     <div class="comment-card">
-      <label>Challenge 1 — Validation and Planning (out of 20)
-        <input id="mark1" type="number" min="0" max="20" step="1" placeholder="Mark / 20">
+      <label>Challenge 1 — Validation and Planning Mark (out of 20)
+        <input id="mark1" type="number" min="0" max="20" step="1" placeholder="Enter mark out of 20">
       </label>
-      <label>YES Comments
-        <textarea id="comments1" rows="5" placeholder="Paste Challenge 1 comments here..."></textarea>
-      </label>
-    </div>
-
-    <div class="comment-card">
-      <label>Challenge 2 — Pitch (out of 30)
-        <input id="mark2" type="number" min="0" max="30" step="1" placeholder="Mark / 30">
-      </label>
-      <label>YES Comments
-        <textarea id="comments2" rows="5" placeholder="Paste Challenge 2 comments here..."></textarea>
+      <label class="comment-label">YES Comments
+        <textarea id="comments1" rows="5" placeholder="Paste YES comments for Challenge 1 here..."></textarea>
       </label>
     </div>
 
     <div class="comment-card">
-      <label>Challenge 3 — Promotion and Marketing (out of 20)
-        <input id="mark3" type="number" min="0" max="20" step="1" placeholder="Mark / 20">
+      <label>Challenge 2 — Pitch Mark (out of 30)
+        <input id="mark2" type="number" min="0" max="30" step="1" placeholder="Enter mark out of 30">
       </label>
-      <label>YES Comments
-        <textarea id="comments3" rows="5" placeholder="Paste Challenge 3 comments here..."></textarea>
+      <label class="comment-label">YES Comments
+        <textarea id="comments2" rows="5" placeholder="Paste YES comments for Challenge 2 here..."></textarea>
       </label>
     </div>
 
     <div class="comment-card">
-      <label>Challenge 4 — Achievements and Reflections (out of 30)
-        <input id="mark4" type="number" min="0" max="30" step="1" placeholder="Mark / 30">
+      <label>Challenge 3 — Promotion and Marketing Mark (out of 20)
+        <input id="mark3" type="number" min="0" max="20" step="1" placeholder="Enter mark out of 20">
       </label>
-      <label>YES Comments
-        <textarea id="comments4" rows="5" placeholder="Paste Challenge 4 comments here..."></textarea>
+      <label class="comment-label">YES Comments
+        <textarea id="comments3" rows="5" placeholder="Paste YES comments for Challenge 3 here..."></textarea>
+      </label>
+    </div>
+
+    <div class="comment-card">
+      <label>Challenge 4 — Achievements and Reflections Mark (out of 30)
+        <input id="mark4" type="number" min="0" max="30" step="1" placeholder="Enter mark out of 30">
+      </label>
+      <label class="comment-label">YES Comments
+        <textarea id="comments4" rows="5" placeholder="Paste YES comments for Challenge 4 here..."></textarea>
       </label>
     </div>
   </div>
 
   <h2>5. Final document order</h2>
+
   <div class="preview">
     <ol id="preview"></ol>
   </div>
 
   <h2>6. Generate moderation portfolio</h2>
+
   <label>Output filename
     <input id="outputName" value="YES_Moderation_Portfolio">
   </label>
 
   <div class="actions">
-    <button class="primary" id="merge">Generate Moderation PDF</button>
+    <button class="primary" id="merge">
+      Generate Moderation PDF
+    </button>
   </div>
 
   <p id="status" class="status" role="status"></p>
 </main>
 
 <script>
-const SECTION_GROUPS = [
+
+  const SECTION_GROUPS = [
   {
-    title:"Business Planning",
-    sections:[
+    title: "Business Planning",
+    sections: [
       "Organisational Structure",
       "LEAN Canvas",
       "Challenge One (Validation + Planning)",
@@ -339,15 +403,15 @@ const SECTION_GROUPS = [
     ]
   },
   {
-    title:"Business Carry Out",
-    sections:[
+    title: "Business Carry Out",
+    sections: [
       "Challenge Three (Promotion and Marketing)",
       "Challenge Four (Achievements)"
     ]
   },
   {
-    title:"Business Evaluation",
-    sections:[
+    title: "Business Evaluation",
+    sections: [
       "Challenge Four (Group Reflections)",
       "Individual Evaluation"
     ]
@@ -356,90 +420,96 @@ const SECTION_GROUPS = [
 
 const sections = SECTION_GROUPS.flatMap(group => group.sections);
 const files = [];
+
 const $ = id => document.getElementById(id);
 const drop = $("drop");
-const fileInput = $("fileInput");
-const supported = /\.(pdf|png|jpe?g|pptx)$/i;
+const input = $("fileInput");
 
-const challengeInfo = {
-  "Challenge One (Validation + Planning)": {
-    number:1,
-    title:"Challenge 1 — Validation and Planning",
-    maximum:20
-  },
-  "Challenge Two (Pitch)": {
-    number:2,
-    title:"Challenge 2 — Pitch",
-    maximum:30
-  },
-  "Challenge Three (Promotion and Marketing)": {
-    number:3,
-    title:"Challenge 3 — Promotion and Marketing",
-    maximum:20
-  },
-  "Challenge Four (Achievements)": {
-    number:4,
-    title:"Challenge 4 — Achievements and Reflections",
-    maximum:30
-  }
-};
+const SUPPORTED_FILE = /\.(pdf|png|jpe?g|pptx)$/i;
 
-$("browse").onclick = () => fileInput.click();
+$("browse").onclick = () => input.click();
 
 drop.onclick = event => {
-  if (!event.target.closest("button")) fileInput.click();
+  if (event.target.closest("button")) return;
+  input.click();
 };
 
-["dragenter","dragover"].forEach(event => {
-  drop.addEventListener(event,e => {
+["dragenter", "dragover"].forEach(event => {
+  drop.addEventListener(event, e => {
     e.preventDefault();
     drop.classList.add("over");
   });
 });
 
-["dragleave","drop"].forEach(event => {
-  drop.addEventListener(event,e => {
+["dragleave", "drop"].forEach(event => {
+  drop.addEventListener(event, e => {
     e.preventDefault();
     drop.classList.remove("over");
   });
 });
 
-drop.addEventListener("drop",e => addFiles(e.dataTransfer.files));
-
-fileInput.addEventListener("change",() => {
-  addFiles(fileInput.files);
-  fileInput.value = "";
+drop.addEventListener("drop", e => {
+  addFiles(e.dataTransfer.files);
 });
 
-function guessSection(filename) {
-  const name = filename.toLowerCase().replace(/[_-]+/g," ");
+input.addEventListener("change", () => {
+  addFiles(input.files);
+  input.value = "";
+});
 
-  if (name.includes("title page")) return "";
-  if (name.includes("organisational structure") ||
-      name.includes("organizational structure") ||
-      name.includes("org structure")) return sections[0];
-  if (name.includes("lean") || name.includes("canvas")) return sections[1];
-  if (name.includes("challenge 1") || name.includes("challenge one") ||
-      name.includes("validation")) return sections[2];
-  if (name.includes("challenge 2") || name.includes("challenge two") ||
-      name.includes("pitch")) return sections[3];
-  if (name.includes("challenge 3") || name.includes("challenge three") ||
-      name.includes("promotion") || name.includes("marketing")) return sections[4];
-  if (name.includes("group reflection")) return sections[6];
-  if (name.includes("individual evaluation")) return sections[7];
-  if (name.includes("achievement") || name.includes("challenge 4") ||
-      name.includes("challenge four")) return sections[5];
+function guessSection(name) {
+  const n = name.toLowerCase().replace(/[_-]+/g, " ");
+
+  if (
+    n.includes("organisational structure") ||
+    n.includes("organizational structure") ||
+    n.includes("org structure")
+  ) return sections[0];
+
+  if (n.includes("lean") || n.includes("canvas"))
+    return sections[1];
+
+  if (
+    n.includes("challenge 1") ||
+    n.includes("challenge one") ||
+    n.includes("validation")
+  ) return sections[2];
+
+  if (
+    n.includes("challenge 2") ||
+    n.includes("challenge two") ||
+    n.includes("pitch")
+  ) return sections[3];
+
+  if (
+    n.includes("challenge 3") ||
+    n.includes("challenge three") ||
+    n.includes("promotion") ||
+    n.includes("marketing")
+  ) return sections[4];
+
+  if (n.includes("group reflection"))
+    return sections[6];
+
+  if (n.includes("individual evaluation"))
+    return sections[7];
+
+  if (
+    n.includes("achievement") ||
+    n.includes("challenge 4") ||
+    n.includes("challenge four")
+  ) return sections[5];
 
   return "";
 }
 
 function addFiles(selectedFiles) {
   let added = 0;
-  let unsupportedCount = 0;
+  let unsupported = 0;
 
   for (const file of Array.from(selectedFiles)) {
-    if (!supported.test(file.name)) {
-      unsupportedCount++;
+    if (!SUPPORTED_FILE.test(file.name)) {
+      unsupported++;
       continue;
     }
 
@@ -453,25 +523,37 @@ function addFiles(selectedFiles) {
 
     files.push({
       file,
-      section:guessSection(file.name)
+      section: guessSection(file.name)
     });
+
     added++;
   }
 
   render();
 
   let message = `${added} file(s) added.`;
-  if (unsupportedCount) message += ` ${unsupportedCount} unsupported file(s) skipped.`;
-  if (added) message += " Check the section assignments.";
+
+  if (unsupported) {
+    message += ` ${unsupported} unsupported file(s) skipped.`;
+  }
+
+  if (added) {
+    message += " Check each section assignment.";
+  } else if (!unsupported) {
+    message = "No new files added. They may already be uploaded.";
+  }
+
   $("status").textContent = message;
 }
 
 function fileTypeLabel(file) {
   const name = file.name.toLowerCase();
+
   if (name.endsWith(".pdf")) return "PDF";
   if (name.endsWith(".png")) return "PNG image";
   if (/\.(jpg|jpeg)$/.test(name)) return "JPEG image";
-  if (name.endsWith(".pptx")) return "PowerPoint — export as PDF first";
+  if (name.endsWith(".pptx")) return "PowerPoint — convert to PDF first";
+
   return "Unknown format";
 }
 
@@ -479,20 +561,24 @@ function render() {
   const container = $("files");
   container.replaceChildren();
 
-  files.forEach((item,index) => {
+  files.forEach((item, index) => {
     const row = document.createElement("div");
     row.className = "file";
 
     const name = document.createElement("div");
     name.className = "filename";
+
     name.textContent = "📄 " + item.file.name;
 
-    const small = document.createElement("small");
-    small.textContent = fileTypeLabel(item.file) + " · " +
+    const size = document.createElement("small");
+    size.textContent =
+      fileTypeLabel(item.file) + " · " +
       (item.file.size / 1024 / 1024).toFixed(2) + " MB";
-    name.appendChild(small);
+
+    name.appendChild(size);
 
     const select = document.createElement("select");
+
     const placeholder = document.createElement("option");
     placeholder.value = "";
     placeholder.textContent = "Choose a section...";
@@ -506,6 +592,7 @@ function render() {
     });
 
     select.value = item.section;
+
     select.onchange = () => {
       item.section = select.value;
       renderPreview();
@@ -514,12 +601,13 @@ function render() {
     const remove = document.createElement("button");
     remove.className = "danger";
     remove.textContent = "Remove";
+
     remove.onclick = () => {
-      files.splice(index,1);
+      files.splice(index, 1);
       render();
     };
 
-    row.append(name,select,remove);
+    row.append(name, select, remove);
     container.appendChild(row);
   });
 
@@ -530,14 +618,16 @@ function renderPreview() {
   const list = $("preview");
   list.replaceChildren();
 
-  function add(text,level=0) {
+  function add(text, level = 0) {
     const li = document.createElement("li");
     li.textContent = text;
+
     if (level) li.style.marginLeft = "12px";
+
     list.appendChild(li);
   }
 
-  add("First page: uploaded Title Page PDF");
+  add("Cover page: Student and company details");
 
   SECTION_GROUPS.forEach(group => {
     add(group.title);
@@ -546,32 +636,55 @@ function renderPreview() {
       add(section);
 
       const assigned = files.filter(f => f.section === section);
-      if (!assigned.length) add("No file assigned yet",1);
-      else assigned.forEach(f => add(f.file.name,1));
 
-      const info = challengeInfo[section];
-      if (info) {
-        const mark = $("mark" + info.number).value;
-        const comments = $("comments" + info.number).value.trim();
-        if (mark !== "" || comments) {
-          add(`Challenge ${info.number} feedback — ${mark || "Mark not entered"} / ${info.maximum}`,1);
-        }
+      if (!assigned.length) {
+        add("No file assigned yet", 1);
+      } else {
+        assigned.forEach(f => add(f.file.name, 1));
       }
     });
   });
 
+  [1, 2, 3, 4].forEach(number => {
+    const value = $("comments" + number).value.trim();
+    if (value) add("YES Comments — Challenge " + number, 1);
+  });
+
   add("Grade Summary");
-  add("Business Plan Grade: " + ($("businessGrade").value || "Blank"),1);
-  add("Individual Evaluation Grade: " + ($("individualGrade").value || "Blank"),1);
-  add("Overall Grade: " + ($("overallGrade").value || "Blank"),1);
-  add("Teacher Comment: " + ($("teacherComment").value.trim() ? "Entered" : "Blank"),1);
+  add("Teacher Comment: " + ($("teacherComment").value.trim() ? "Entered" : "Blank"), 1);
+  add(
+    "Business Plan Grade: " +
+    ($("businessGrade").value || "Blank"), 1
+  );
+  add(
+    "Individual Evaluation Grade: " +
+    ($("individualGrade").value || "Blank"), 1
+  );
+  add(
+    "Overall Grade: " +
+    ($("overallGrade").value || "Blank"), 1
+  );
 }
 
 [
-  "student","company","product","businessGrade","individualGrade",
-  "overallGrade","teacherComment","mark1","mark2","mark3","mark4",
-  "comments1","comments2","comments3","comments4"
-].forEach(id => $(id).addEventListener("input",renderPreview));
+  "student",
+  "company",
+  "product",
+  "businessGrade",
+  "individualGrade",
+  "overallGrade",
+  "teacherComment",
+  "comments1",
+  "comments2",
+  "comments3",
+  "comments4",
+  "mark1",
+  "mark2",
+  "mark3",
+  "mark4"
+].forEach(id => {
+  $(id).addEventListener("input", renderPreview);
+});
 
 $("clear").onclick = () => {
   files.length = 0;
@@ -579,31 +692,214 @@ $("clear").onclick = () => {
   $("status").textContent = "";
 };
 
-function addWrappedText(page,text,options) {
-  const {
-    x,y,font,size,maxWidth,lineHeight=size*1.5,color=PDFLib.rgb(0.29,0.19,0.27)
-  } = options;
-
+function drawWrappedText(page, text, x, y, font, size, maxWidth) {
+  const words = String(text || "").split(/\s+/);
+  let line = "";
   let currentY = y;
 
-  for (const paragraph of String(text || "").split(/\r?\n/)) {
+  for (const word of words) {
+    const test = line ? line + " " + word : word;
+
+    if (
+      font.widthOfTextAtSize(test, size) > maxWidth &&
+      line
+    ) {
+      page.drawText(line, {
+        x, y: currentY, font, size
+      });
+
+      currentY -= size * 1.5;
+      line = word;
+    } else {
+      line = test;
+    }
+  }
+
+  if (line) {
+    page.drawText(line, {
+      x, y: currentY, font, size
+    });
+  }
+
+  return currentY - size * 1.5;
+}
+
+// Adds a pale pink label behind section headings in the output PDF.
+function drawSectionTitleLabel(page, title, x, y, font, size) {
+  const padX = 8;
+  const padY = 5;
+  const textWidth = font.widthOfTextAtSize(title, size);
+  const textHeight = size + padY * 2;
+
+  page.drawRectangle({
+    x: x - padX,
+    y: y - padY,
+    width: textWidth + padX * 2,
+    height: textHeight,
+    color: PDFLib.rgb(1, 0.91, 0.95),
+    borderColor: PDFLib.rgb(0.94, 0.68, 0.78),
+    borderWidth: 0.8,
+    opacity: 0.96
+  });
+
+  page.drawText(title, {
+    x,
+    y,
+    size,
+    font,
+    color: PDFLib.rgb(0.59, 0.16, 0.34)
+  });
+}
+
+function addHeadingPage(pdf, title, font, bold) {
+  const page = pdf.addPage([595.28, 841.89]);
+  const { width, height } = page.getSize();
+
+  page.drawText("YES BUSINESS PORTFOLIO", {
+    x: 55,
+    y: height - 70,
+    size: 11,
+    font: bold,
+    color: PDFLib.rgb(0.75, 0.25, 0.45)
+  });
+
+  page.drawLine({
+    start: { x: 55, y: height - 85 },
+    end: { x: width - 55, y: height - 85 },
+    thickness: 1,
+    color: PDFLib.rgb(0.94, 0.68, 0.78)
+  });
+
+  drawWrappedText(
+    page, title, 55, height - 160,
+    bold, 24, width - 110
+  );
+
+  if ($("student").value.trim()) {
+    page.drawText(
+      "Student: " + $("student").value.trim(),
+      { x: 55, y: 65, size: 10, font }
+    );
+  }
+
+  return page;
+}
+
+function addCommentPages(pdf, title, markValue, maxMark, commentText, font, bold, studentName) {
+  const text = (commentText || "").trim();
+  const mark = String(markValue ?? "").trim();
+
+  if (!text && !mark) return;
+
+  const pageWidth = 595.28;
+  const pageHeight = 841.89;
+  const margin = 55;
+  let page;
+  let y;
+
+  function newPage() {
+    page = pdf.addPage([pageWidth, pageHeight]);
+
+    page.drawText("YES FEEDBACK / COMMENTS", {
+      x: margin,
+      y: pageHeight - 55,
+      size: 10,
+      font: bold,
+      color: PDFLib.rgb(0.75, 0.25, 0.45)
+    });
+
+    page.drawLine({
+      start: { x: margin, y: pageHeight - 68 },
+      end: { x: pageWidth - margin, y: pageHeight - 68 },
+      thickness: 1,
+      color: PDFLib.rgb(0.94, 0.68, 0.78)
+    });
+
+    page.drawText(title, {
+      x: margin,
+      y: pageHeight - 105,
+      size: 18,
+      font: bold,
+      color: PDFLib.rgb(0.75, 0.25, 0.45)
+    });
+
+    y = pageHeight - 135;
+
+    if (studentName) {
+      page.drawText("Student: " + studentName, {
+        x: margin, y, size: 10, font
+      });
+      y -= 28;
+    }
+
+    if (mark !== "") {
+      page.drawRectangle({
+        x: margin,
+        y: y - 26,
+        width: 180,
+        height: 38,
+        color: PDFLib.rgb(1, 0.91, 0.95),
+        borderColor: PDFLib.rgb(0.85, 0.36, 0.55),
+        borderWidth: 1
+      });
+
+      page.drawText("CHALLENGE MARK: " + mark + " / " + maxMark, {
+        x: margin + 12,
+        y: y - 3,
+        size: 13,
+        font: bold,
+        color: PDFLib.rgb(0.59, 0.16, 0.34)
+      });
+
+      y -= 58;
+    }
+
+    if (text) {
+      page.drawText("YES COMMENTS", {
+        x: margin,
+        y,
+        size: 11,
+        font: bold,
+        color: PDFLib.rgb(0.59, 0.16, 0.34)
+      });
+
+      y -= 22;
+    }
+  }
+
+  newPage();
+
+  if (!text) return;
+
+  const paragraphs = text.split(/\r?\n/);
+
+  for (const paragraph of paragraphs) {
     if (!paragraph.trim()) {
-      currentY -= lineHeight;
+      y -= 10;
       continue;
     }
 
+    const words = paragraph.trim().split(/\s+/);
     let line = "";
-    for (const word of paragraph.trim().split(/\s+/)) {
+
+    for (const word of words) {
       const candidate = line ? line + " " + word : word;
 
-      if (font.widthOfTextAtSize(candidate,size) > maxWidth && line) {
-        if (currentY < 55) {
-          currentY = 760;
-          page = options.newPage ? options.newPage() : page;
-        }
+      if (
+        font.widthOfTextAtSize(candidate, 11) >
+        pageWidth - margin * 2 &&
+        line
+      ) {
+        if (y < 65) newPage();
 
-        page.drawText(line,{x,y:currentY,font,size,color});
-        currentY -= lineHeight;
+        page.drawText(line, {
+          x: margin,
+          y,
+          size: 11,
+          font
+        });
+
+        y -= 17;
         line = word;
       } else {
         line = candidate;
@@ -611,229 +907,121 @@ function addWrappedText(page,text,options) {
     }
 
     if (line) {
-      if (currentY < 55) {
-        currentY = 760;
-        page = options.newPage ? options.newPage() : page;
-      }
+      if (y < 65) newPage();
 
-      page.drawText(line,{x,y:currentY,font,size,color});
-      currentY -= lineHeight;
+      page.drawText(line, {
+        x: margin,
+        y,
+        size: 11,
+        font
+      });
+
+      y -= 20;
     }
   }
-
-  return {page,y:currentY};
 }
 
-function addHeadingPage(pdf,title,font,bold) {
-  const page = pdf.addPage([595.28,841.89]);
-  const {width,height} = page.getSize();
-
-  page.drawText("YES BUSINESS PORTFOLIO",{
-    x:55,y:height-70,size:11,font:bold,
-    color:PDFLib.rgb(.75,.25,.45)
-  });
-
-  page.drawLine({
-    start:{x:55,y:height-85},
-    end:{x:width-55,y:height-85},
-    thickness:1,
-    color:PDFLib.rgb(.94,.68,.78)
-  });
-
-  page.drawText(title,{
-    x:55,y:height-160,size:24,font:bold,
-    color:PDFLib.rgb(.75,.25,.45)
-  });
-
-  if ($("student").value.trim()) {
-    page.drawText("Student: " + $("student").value.trim(),{
-      x:55,y:65,size:10,font
-    });
-  }
-
-  return page;
-}
-
-function addChallengeFeedback(pdf,info,font,bold,studentName) {
-  const mark = $("mark" + info.number).value.trim();
-  const comments = $("comments" + info.number).value.trim();
-
-  if (!mark && !comments) return;
-
-  let page = pdf.addPage([595.28,841.89]);
-  const pageWidth = 595.28;
-  const margin = 55;
-
-  function newPage() {
-    page = pdf.addPage([595.28,841.89]);
-    page.drawText(info.title + " — CONTINUED",{
-      x:margin,y:780,size:15,font:bold,
-      color:PDFLib.rgb(.75,.25,.45)
-    });
-    return page;
-  }
-
-  page.drawText("YES FEEDBACK / COMMENTS",{
-    x:margin,y:786,size:10,font:bold,
-    color:PDFLib.rgb(.75,.25,.45)
-  });
-
-  page.drawLine({
-    start:{x:margin,y:772},
-    end:{x:pageWidth-margin,y:772},
-    thickness:1,color:PDFLib.rgb(.94,.68,.78)
-  });
-
-  page.drawText(info.title,{
-    x:margin,y:735,size:19,font:bold,
-    color:PDFLib.rgb(.75,.25,.45)
-  });
-
-  let y = 700;
-
-  if (studentName) {
-    page.drawText("Student: " + studentName,{x:margin,y,size:10,font});
-    y -= 28;
-  }
-
-  if (mark !== "") {
-    page.drawRectangle({
-      x:margin,y:y-25,width:210,height:40,
-      color:PDFLib.rgb(1,.91,.95),
-      borderColor:PDFLib.rgb(.85,.36,.55),
-      borderWidth:1
-    });
-
-    page.drawText("CHALLENGE MARK: " + mark + " / " + info.maximum,{
-      x:margin+12,y:y-10,size:13,font:bold,
-      color:PDFLib.rgb(.59,.16,.34)
-    });
-
-    y -= 60;
-  }
-
-  if (comments) {
-    page.drawText("YES COMMENTS",{
-      x:margin,y,size:11,font:bold,
-      color:PDFLib.rgb(.59,.16,.34)
-    });
-
-    y -= 24;
-
-    const result = addWrappedText(page,comments,{
-      x:margin,y,font,size:11,maxWidth:pageWidth-margin*2,
-      lineHeight:16,
-      newPage
-    });
-
-    page = result.page;
-  }
-}
-
-function addTeacherComment(pdf,comment,font,bold,studentName) {
-  if (!comment.trim()) return;
-
-  let page = pdf.addPage([595.28,841.89]);
-  const margin = 55;
-  const pageWidth = 595.28;
-
-  function newPage() {
-    page = pdf.addPage([595.28,841.89]);
-    page.drawText("TEACHER COMMENT — CONTINUED",{
-      x:margin,y:780,size:15,font:bold,
-      color:PDFLib.rgb(.75,.25,.45)
-    });
-    return page;
-  }
-
-  page.drawText("TEACHER COMMENT",{
-    x:margin,y:785,size:20,font:bold,
-    color:PDFLib.rgb(.75,.25,.45)
-  });
-
-  page.drawLine({
-    start:{x:margin,y:768},
-    end:{x:pageWidth-margin,y:768},
-    thickness:1,color:PDFLib.rgb(.94,.68,.78)
-  });
-
-  let y = 735;
-
-  if (studentName) {
-    page.drawText("Student: " + studentName,{x:margin,y,size:10,font});
-    y -= 28;
-  }
-
-  addWrappedText(page,comment,{
-    x:margin,y,font,size:11,maxWidth:pageWidth-margin*2,
-    lineHeight:17,newPage
-  });
-}
-
-async function createPortfolio() {
+  async function createPortfolio() {
   if (!window.PDFLib) {
-    throw new Error("The PDF library did not load. Check your internet connection and reload.");
+    throw new Error(
+      "The PDF library did not load. Check your internet connection and reload."
+    );
   }
 
-  const markLimits = {mark1:20,mark2:30,mark3:20,mark4:30};
+  const markLimits = {
+    mark1: 20,
+    mark2: 30,
+    mark3: 20,
+    mark4: 30
+  };
 
-  for (const [id,maximum] of Object.entries(markLimits)) {
+  for (const [id, maximum] of Object.entries(markLimits)) {
     const field = $(id);
 
     if (field.value.trim() !== "") {
       const value = Number(field.value);
 
       if (!Number.isInteger(value) || value < 0 || value > maximum) {
-        throw new Error(`Challenge mark must be a whole number between 0 and ${maximum}.`);
+        throw new Error(
+          field.closest("label").textContent.trim() +
+          ` must be a whole number from 0 to ${maximum}.`
+        );
       }
     }
   }
 
   const assigned = files.filter(f => f.section);
 
+  if (!assigned.length) {
+    throw new Error(
+      "Assign at least one file to a section before generating."
+    );
+  }
+
+  // Check PowerPoint files before starting.
   const pptxFiles = assigned.filter(item =>
     item.file.name.toLowerCase().endsWith(".pptx")
   );
 
   if (pptxFiles.length) {
     throw new Error(
-      "Please export PowerPoint files as PDFs before merging:\n" +
-      pptxFiles.map(item => "• " + item.file.name).join("\n")
+      "PowerPoint files need conversion before merging:\n" +
+      pptxFiles.map(item => "• " + item.file.name).join("\n") +
+      "\n\nOpen each presentation in PowerPoint and export it as a PDF. " +
+      "Then remove the PPTX file and upload its PDF version."
     );
   }
 
-  // The first page of a PDF named with "Title Page" must be the portfolio's first page.
+  const pdf = await PDFLib.PDFDocument.create();
+
+  const font = await pdf.embedFont(
+    PDFLib.StandardFonts.Helvetica
+  );
+
+  const bold = await pdf.embedFont(
+    PDFLib.StandardFonts.HelveticaBold
+  );
+
+  // TITLE PAGE:
+  // Use the first page of an uploaded PDF whose filename contains "Title Page".
   const titlePageItem = files.find(item =>
     item.file.name.toLowerCase().endsWith(".pdf") &&
     /title[ _-]*page/i.test(item.file.name)
   );
 
   if (!titlePageItem) {
-    throw new Error('Upload the title-page PDF with "Title Page" in its filename, for example "Student Name - Title Page.pdf".');
+    throw new Error(
+      'Please upload the title page PDF with "Title Page" in its filename ' +
+      '(for example, Student Name - Title Page.pdf). Its first page will ' +
+      "become page 1 of the final portfolio."
+    );
   }
 
-  const pdf = await PDFLib.PDFDocument.create();
-  const font = await pdf.embedFont(PDFLib.StandardFonts.Helvetica);
-  const bold = await pdf.embedFont(PDFLib.StandardFonts.HelveticaBold);
-
-  const titleSource = await PDFLib.PDFDocument.load(
+  const titlePageSource = await PDFLib.PDFDocument.load(
     await titlePageItem.file.arrayBuffer()
   );
 
-  if (!titleSource.getPageCount()) {
-    throw new Error("The uploaded title-page PDF has no pages.");
+  if (titlePageSource.getPageCount() < 1) {
+    throw new Error(
+      "The uploaded title page PDF does not contain any pages."
+    );
   }
 
-  const [firstTitlePage] = await pdf.copyPages(titleSource,[0]);
-  pdf.addPage(firstTitlePage);
+  const [titlePage] = await pdf.copyPages(titlePageSource, [0]);
+  pdf.addPage(titlePage);
 
+  // SECTION HEADINGS AND CONTENT
   for (const group of SECTION_GROUPS) {
-    addHeadingPage(pdf,group.title,font,bold);
+    // Add a divider page for each main category.
+    addHeadingPage(pdf, group.title, font, bold);
 
     for (const section of group.sections) {
-      const sectionFiles = assigned.filter(item => item.section === section);
+      const sectionFiles = assigned.filter(
+        item => item.section === section
+      );
 
-      for (let i=0;i<sectionFiles.length;i++) {
+      // Add files in the assigned section order.
+      for (let i = 0; i < sectionFiles.length; i++) {
         const item = sectionFiles[i];
         const file = item.file;
         const name = file.name.toLowerCase();
@@ -841,142 +1029,342 @@ async function createPortfolio() {
 
         if (name.endsWith(".pdf")) {
           const source = await PDFLib.PDFDocument.load(bytes);
-          const pages = await pdf.copyPages(source,source.getPageIndices());
 
-          for (let pageIndex=0;pageIndex<pages.length;pageIndex++) {
-            if (item === titlePageItem && pageIndex === 0) continue;
+          const pages = await pdf.copyPages(
+            source,
+            source.getPageIndices()
+          );
+
+          for (
+            let pageIndex = 0;
+            pageIndex < pages.length;
+            pageIndex++
+          ) {
+            // The title page's first page has already been placed at the start.
+            if (item === titlePageItem && pageIndex === 0) {
+              continue;
+            }
 
             const page = pages[pageIndex];
 
+            // Add a section label to the first page of the first PDF
+            // assigned to this section.
             if (i === 0 && pageIndex === 0) {
-              const {height} = page.getSize();
-              page.drawText(section,{
-                x:40,y:height-30,size:14,font:bold,
-                color:PDFLib.rgb(.75,.25,.45)
-              });
+              const { height } = page.getSize();
+
+              drawSectionTitleLabel(
+                page,
+                section,
+                40,
+                height - 30,
+                bold,
+                14
+              );
             }
 
             pdf.addPage(page);
           }
-        } else if (/\.(png|jpg|jpeg)$/.test(name)) {
-          const image = name.endsWith(".png")
-            ? await pdf.embedPng(bytes)
-            : await pdf.embedJpg(bytes);
 
-          const pageWidth=595.28,pageHeight=841.89,margin=35;
-          const titleSpace=i===0?65:25;
-          const availableWidth=pageWidth-margin*2;
-          const availableHeight=pageHeight-margin-titleSpace;
-          const scale=Math.min(
-            availableWidth/image.width,
-            availableHeight/image.height
-          );
-          const imageWidth=image.width*scale;
-          const imageHeight=image.height*scale;
+        } else if (
+          name.endsWith(".png") ||
+          name.endsWith(".jpg") ||
+          name.endsWith(".jpeg")
+        ) {
+          let image;
 
-          const page=pdf.addPage([pageWidth,pageHeight]);
-
-          if (i===0) {
-            page.drawText(section,{
-              x:margin,y:pageHeight-30,size:14,font:bold,
-              color:PDFLib.rgb(.75,.25,.45)
-            });
+          if (name.endsWith(".png")) {
+            image = await pdf.embedPng(bytes);
+          } else {
+            image = await pdf.embedJpg(bytes);
           }
 
-          page.drawImage(image,{
-            x:(pageWidth-imageWidth)/2,
-            y:margin+(availableHeight-imageHeight)/2,
-            width:imageWidth,height:imageHeight
+          // Each image is placed on an A4 page with space for the heading.
+          const pageWidth = 595.28;
+          const pageHeight = 841.89;
+          const margin = 35;
+          const titleSpace = i === 0 ? 65 : 25;
+
+          const availableWidth = pageWidth - margin * 2;
+          const availableHeight =
+            pageHeight - margin - titleSpace;
+
+          const scale = Math.min(
+            availableWidth / image.width,
+            availableHeight / image.height
+          );
+
+          const imageWidth = image.width * scale;
+          const imageHeight = image.height * scale;
+
+          const page = pdf.addPage([
+            pageWidth,
+            pageHeight
+          ]);
+
+          // Add a section heading on the first image page in this section.
+          if (i === 0) {
+            drawSectionTitleLabel(
+              page,
+              section,
+              margin,
+              pageHeight - 30,
+              bold,
+              14
+            );
+          }
+
+          page.drawImage(image, {
+            x: (pageWidth - imageWidth) / 2,
+            y: margin +
+              (availableHeight - imageHeight) / 2,
+            width: imageWidth,
+            height: imageHeight
           });
         }
       }
 
-      if (challengeInfo[section]) {
-        addChallengeFeedback(
-          pdf,challengeInfo[section],font,bold,
+      // Add challenge marks and YES comments after the relevant documents.
+      const commentBySection = {
+        "Challenge One (Validation + Planning)": [
+          1,
+          "Challenge 1 — Validation and Planning",
+          20
+        ],
+        "Challenge Two (Pitch)": [
+          2,
+          "Challenge 2 — Pitch",
+          30
+        ],
+        "Challenge Three (Promotion and Marketing)": [
+          3,
+          "Challenge 3 — Promotion and Marketing",
+          20
+        ],
+        "Challenge Four (Achievements)": [
+          4,
+          "Challenge 4 — Achievements and Reflections",
+          30
+        ]
+      };
+
+      if (commentBySection[section]) {
+        const [number, title, maxMark] =
+          commentBySection[section];
+
+        addCommentPages(
+          pdf,
+          title,
+          $("mark" + number).value,
+          maxMark,
+          $("comments" + number).value,
+          font,
+          bold,
           $("student").value.trim()
         );
       }
     }
   }
 
-  // Grade summary page
-  const gradePage = pdf.addPage([595.28,841.89]);
+  // GRADE SUMMARY
+  const gradePage = pdf.addPage([595.28, 841.89]);
 
-  gradePage.drawText("GRADE SUMMARY",{
-    x:55,y:785,size:23,font:bold,
-    color:PDFLib.rgb(.75,.25,.45)
-  });
-
-  gradePage.drawLine({
-    start:{x:55,y:768},end:{x:540,y:768},
-    thickness:1,color:PDFLib.rgb(.94,.68,.78)
+  gradePage.drawText("GRADE SUMMARY", {
+    x: 55,
+    y: 760,
+    size: 23,
+    font: bold
   });
 
   gradePage.drawText(
-    "Student: " + ($("student").value.trim() || "________________"),
-    {x:55,y:735,size:11,font}
+    "Student: " +
+    ($("student").value.trim() || "________________"),
+    {
+      x: 55,
+      y: 720,
+      size: 11,
+      font
+    }
   );
 
   const grades = [
-    {title:"Business Plan Grade",value:$("businessGrade").value},
-    {title:"Individual Evaluation Grade",value:$("individualGrade").value},
-    {title:"Overall Grade",value:$("overallGrade").value}
+    {
+      title: "Business Plan Grade",
+      value: $("businessGrade").value
+    },
+    {
+      title: "Individual Evaluation Grade",
+      value: $("individualGrade").value
+    },
+    {
+      title: "Overall Grade",
+      value: $("overallGrade").value
+    }
   ];
 
-  let gy=680;
+  let gy = 650;
 
   for (const grade of grades) {
-    gradePage.drawText(grade.title,{
-      x:55,y:gy,size:14,font:bold
+    gradePage.drawText(grade.title, {
+      x: 55,
+      y: gy,
+      size: 14,
+      font: bold
     });
 
     gradePage.drawRectangle({
-      x:55,y:gy-55,width:485,height:38,
-      borderWidth:1,borderColor:PDFLib.rgb(.65,.69,.74)
+      x: 55,
+      y: gy - 55,
+      width: 485,
+      height: 38,
+      borderWidth: 1,
+      borderColor: PDFLib.rgb(0.65, 0.69, 0.74)
     });
 
-    if (grade.value.trim()) {
-      gradePage.drawText(grade.value.trim(),{
-        x:68,y:gy-43,size:12,font
+    const value = grade.value.trim();
+
+    if (value) {
+      gradePage.drawText(value, {
+        x: 68,
+        y: gy - 43,
+        size: 12,
+        font
       });
     }
 
-    gy-=105;
+    gy -= 130;
   }
 
-  // Teacher comment follows the grade summary.
-  addTeacherComment(
-    pdf,$("teacherComment").value,font,bold,
-    $("student").value.trim()
-  );
+  // Add the teacher comment to the grade summary.
+  // If it is too long, continue it on additional pages.
+  const teacherComment = $("teacherComment").value.trim();
 
-  const output=await pdf.save();
-  const blob=new Blob([output],{type:"application/pdf"});
-  const url=URL.createObjectURL(blob);
-  const link=document.createElement("a");
+  if (teacherComment) {
+    gradePage.drawText("TEACHER COMMENT", {
+      x: 55,
+      y: 255,
+      size: 14,
+      font: bold,
+      color: PDFLib.rgb(0.75, 0.25, 0.45)
+    });
 
-  const baseName=$("outputName").value.trim() || "YES_Moderation_Portfolio";
+    let commentPage = gradePage;
+    let commentY = 230;
+    const maxWidth = 485;
+    const fontSize = 11;
+    const lineHeight = 16;
+    const paragraphs = teacherComment.split(/\r?\n/);
 
-  link.href=url;
-  link.download=baseName.toLowerCase().endsWith(".pdf") ? baseName : baseName+".pdf";
+    for (const paragraph of paragraphs) {
+      if (!paragraph.trim()) {
+        commentY -= 8;
+        continue;
+      }
+
+      let line = "";
+
+      for (const word of paragraph.trim().split(/\s+/)) {
+        const candidate = line ? line + " " + word : word;
+
+        if (
+          font.widthOfTextAtSize(candidate, fontSize) > maxWidth &&
+          line
+        ) {
+          if (commentY < 55) {
+            commentPage = pdf.addPage([595.28, 841.89]);
+
+            commentPage.drawText("TEACHER COMMENT (CONTINUED)", {
+              x: 55,
+              y: 780,
+              size: 14,
+              font: bold,
+              color: PDFLib.rgb(0.75, 0.25, 0.45)
+            });
+
+            commentY = 745;
+          }
+
+          commentPage.drawText(line, {
+            x: 55,
+            y: commentY,
+            size: fontSize,
+            font
+          });
+
+          commentY -= lineHeight;
+          line = word;
+        } else {
+          line = candidate;
+        }
+      }
+
+      if (line) {
+        if (commentY < 55) {
+          commentPage = pdf.addPage([595.28, 841.89]);
+
+          commentPage.drawText("TEACHER COMMENT (CONTINUED)", {
+            x: 55,
+            y: 780,
+            size: 14,
+            font: bold,
+            color: PDFLib.rgb(0.75, 0.25, 0.45)
+          });
+
+          commentY = 745;
+        }
+
+        commentPage.drawText(line, {
+          x: 55,
+          y: commentY,
+          size: fontSize,
+          font
+        });
+
+        commentY -= lineHeight;
+      }
+    }
+  }
+
+  // DOWNLOAD THE FINAL PDF
+  const output = await pdf.save();
+
+  const blob = new Blob([output], {
+    type: "application/pdf"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  const baseName =
+    $("outputName").value.trim() ||
+    "YES_Moderation_Portfolio";
+
+  link.href = url;
+  link.download = baseName.toLowerCase().endsWith(".pdf")
+    ? baseName
+    : baseName + ".pdf";
+
   link.click();
 
-  setTimeout(()=>URL.revokeObjectURL(url),3000);
+  setTimeout(() => URL.revokeObjectURL(url), 3000);
 }
 
-$("merge").onclick=async()=>{
-  $("merge").disabled=true;
-  $("status").textContent="Building your moderation portfolio...";
+$("merge").onclick = async () => {
+  $("merge").disabled = true;
+
+  $("status").textContent =
+    "Building your moderation portfolio...";
 
   try {
     await createPortfolio();
-    $("status").textContent="Portfolio generated. Check your downloads folder.";
-  } catch(error) {
+
+    $("status").textContent =
+      "Portfolio generated. Check your downloads folder.";
+  } catch (error) {
     console.error(error);
-    $("status").textContent="Error: "+error.message;
+
+    $("status").textContent = "Error: " + error.message;
   } finally {
-    $("merge").disabled=false;
+    $("merge").disabled = false;
   }
 };
 
