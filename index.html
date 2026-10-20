@@ -8,691 +8,394 @@
 <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 <style>
 :root {
-  --pink-50:#fff7fb; --pink-100:#ffe8f1; --pink-200:#f8cddd;
-  --pink-300:#efa9c4; --pink-500:#d85b8a; --pink-600:#bf3f73;
-  --pink-700:#963258; --plum:#493044; --muted:#806d7b;
-  --border:#f0dce6; --white:#ffffff;
+  --pink-50:#fff7fb;--pink-100:#ffe8f1;--pink-200:#f8cddd;
+  --pink-300:#efa9c4;--pink-500:#d85b8a;--pink-600:#bf3f73;
+  --pink-700:#963258;--plum:#493044;--muted:#806d7b;
+  --border:#f0dce6;--white:#fff;
 }
-* { box-sizing:border-box; }
-body {
-  margin:0; padding:28px 16px; font-family:Arial,sans-serif;
-  background:linear-gradient(135deg,#fff6fa 0%,#fdf0f6 48%,#fff9fc 100%);
-  color:var(--plum);
-}
-main {
-  max-width:850px; margin:auto; background:var(--white); padding:30px;
-  border:1px solid #f6e4ec; border-radius:20px;
-  box-shadow:0 12px 36px #a93c6d12;
-}
-h1 { margin-top:0; }
-h2 {
-  font-size:19px; margin-top:30px; padding-bottom:9px;
-  border-bottom:1px solid var(--pink-100); color:var(--pink-700);
-}
-p { color:var(--muted); line-height:1.55; }
-.webpage-title {
-  color:var(--pink-600); text-align:center;
-  letter-spacing:-0.5px; margin-bottom:10px;
-}
-.field-grid {
-  display:grid; grid-template-columns:repeat(2,1fr); gap:12px;
-}
-input,select,textarea,button { font:inherit; }
-textarea {
-  width:100%; display:block; margin-top:7px; padding:11px 12px;
-  border:1px solid var(--border); border-radius:9px;
-  background:#fffdfd; color:var(--plum); resize:vertical;
-  line-height:1.5; font-weight:normal;
-  transition:border-color .18s ease,box-shadow .18s ease;
-}
-textarea:focus {
-  outline:none; border-color:var(--pink-500);
-  box-shadow:0 0 0 3px #d85b8a1c;
-}
-.comments-grid {
-  display:grid; grid-template-columns:1fr 1fr; gap:14px;
-}
-input,select {
-  width:100%; padding:11px 12px; border:1px solid var(--border);
-  border-radius:9px; background:#fffdfd; color:var(--plum);
-  transition:border-color .18s ease,box-shadow .18s ease;
-}
-input:focus,select:focus {
-  outline:none; border-color:var(--pink-500);
-  box-shadow:0 0 0 3px #d85b8a1c;
-}
-input::placeholder { color:#b29eab; }
-label {
-  display:block; font-weight:bold; font-size:13px; color:#65475b;
-}
-label input { display:block; margin-top:7px; font-weight:normal; }
-.drop {
-  border:2px dashed var(--pink-300); border-radius:15px;
-  padding:32px 15px; text-align:center; cursor:pointer;
-  background:var(--pink-50); margin-top:15px;
-  transition:background .2s ease,border-color .2s ease,transform .2s ease;
-}
-.drop:hover { background:#fff0f6; border-color:var(--pink-500); }
-.drop.over {
-  background:var(--pink-100); border-color:var(--pink-600);
-  transform:scale(1.005);
-}
-.drop strong { color:var(--pink-700); }
-#fileInput { display:none; }
-.file {
-  display:grid; grid-template-columns:minmax(0,1fr) minmax(180px,1fr) auto;
-  gap:10px; align-items:center; padding:12px 0;
-  border-bottom:1px solid #f5e7ee;
-}
-.filename { overflow-wrap:anywhere; font-size:14px; color:var(--plum); }
-.filename small { display:block; color:var(--muted); margin-top:4px; }
-button {
-  border:0; border-radius:9px; padding:12px 15px;
-  cursor:pointer; font-weight:bold;
-  transition:transform .15s ease,background .15s ease,box-shadow .15s ease;
-}
-button:hover:not(:disabled) { transform:translateY(-1px); }
-.primary {
-  background:var(--pink-600); color:white;
-  box-shadow:0 4px 10px #bf3f7326;
-}
-.primary:hover:not(:disabled) { background:var(--pink-700); }
-.secondary { background:var(--pink-100); color:var(--pink-700); }
-.secondary:hover:not(:disabled) { background:var(--pink-200); }
-.danger { background:#fff0f3; color:#a83252; }
-.danger:hover:not(:disabled) { background:#ffdfe7; }
-.actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:20px; }
-.actions button { flex:1; }
-button:disabled { opacity:.5; cursor:not-allowed; }
-.preview {
-  background:#fff9fc; border:1px solid var(--pink-100);
-  padding:16px; border-radius:12px;
-}
-.preview ol { padding-left:23px; margin-bottom:0; }
-.preview li { padding:5px 0; color:#65475b; }
-.muted { color:var(--muted); font-size:13px; }
-.status { white-space:pre-wrap; font-size:14px; color:var(--pink-700); }
-@media(max-width:600px) {
-  body { padding:14px 10px; }
-  main { padding:18px; border-radius:15px; }
-  .field-grid,.comments-grid { grid-template-columns:1fr; }
-  .file { grid-template-columns:1fr; }
-}
+*{box-sizing:border-box}
+body{margin:0;padding:28px 16px;font-family:Arial,sans-serif;background:linear-gradient(135deg,#fff6fa,#fdf0f6 48%,#fff9fc);color:var(--plum)}
+main{max-width:850px;margin:auto;background:white;padding:30px;border:1px solid #f6e4ec;border-radius:20px;box-shadow:0 12px 36px #a93c6d12}
+h1{margin-top:0}
+h2{font-size:19px;margin-top:30px;padding-bottom:9px;border-bottom:1px solid var(--pink-100);color:var(--pink-700)}
+p{color:var(--muted);line-height:1.55}
+.webpage-title{color:var(--pink-600);text-align:center;letter-spacing:-.5px;margin-bottom:10px}
+.field-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+input,select,textarea,button{font:inherit}
+textarea{width:100%;display:block;margin-top:7px;padding:11px 12px;border:1px solid var(--border);border-radius:9px;background:#fffdfd;color:var(--plum);resize:vertical;line-height:1.5;font-weight:normal}
+textarea:focus,input:focus,select:focus{outline:none;border-color:var(--pink-500);box-shadow:0 0 0 3px #d85b8a1c}
+.comments-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.comment-card{padding:14px;border:1px solid var(--pink-100);border-radius:12px;background:#fff9fc}
+input,select{width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:9px;background:#fffdfd;color:var(--plum)}
+input::placeholder{color:#b29eab}
+label{display:block;font-weight:bold;font-size:13px;color:#65475b}
+label input{display:block;margin-top:7px;font-weight:normal}
+.drop{border:2px dashed var(--pink-300);border-radius:15px;padding:32px 15px;text-align:center;cursor:pointer;background:var(--pink-50);margin-top:15px}
+.drop:hover{background:#fff0f6;border-color:var(--pink-500)}
+.drop.over{background:var(--pink-100);border-color:var(--pink-600)}
+.drop strong{color:var(--pink-700)}
+#fileInput{display:none}
+.file{display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,1fr) auto;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid #f5e7ee}
+.filename{overflow-wrap:anywhere;font-size:14px;color:var(--plum)}
+.filename small{display:block;color:var(--muted);margin-top:4px}
+button{border:0;border-radius:9px;padding:12px 15px;cursor:pointer;font-weight:bold}
+button:hover:not(:disabled){transform:translateY(-1px)}
+.primary{background:var(--pink-600);color:white;box-shadow:0 4px 10px #bf3f7326}
+.primary:hover:not(:disabled){background:var(--pink-700)}
+.secondary{background:var(--pink-100);color:var(--pink-700)}
+.secondary:hover:not(:disabled){background:var(--pink-200)}
+.danger{background:#fff0f3;color:#a83252}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.actions button{flex:1}
+button:disabled{opacity:.5;cursor:not-allowed}
+.preview{background:#fff9fc;border:1px solid var(--pink-100);padding:16px;border-radius:12px}
+.preview ol{padding-left:23px;margin-bottom:0}
+.preview li{padding:5px 0;color:#65475b}
+.muted{color:var(--muted);font-size:13px}
+.status{white-space:pre-wrap;font-size:14px;color:var(--pink-700)}
+@media(max-width:600px){body{padding:14px 10px}main{padding:18px;border-radius:15px}.field-grid,.comments-grid{grid-template-columns:1fr}.file{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <main>
-  <h1 class="webpage-title">YES Moderation PDF Merger</h1>
-  <p>Upload a student's YES documents, assign each file to a section,
-  enter the grades, and create one moderation portfolio.</p>
+<h1 class="webpage-title">YES Moderation PDF Merger</h1>
+<p>Upload a student's YES documents, assign each file to a section, enter the grades, and create one moderation portfolio.</p>
 
-  <h2>1. Student details</h2>
-  <div class="field-grid">
-    <label>Student Name
-      <input id="student" placeholder="Enter student name">
-    </label>
-    <label>YES Company
-      <input id="company" placeholder="Enter company name">
-    </label>
-  </div>
-  <label style="margin-top:12px">Product Description
-    <input id="product" placeholder="Enter product description">
-  </label>
+<h2>1. Student details</h2>
+<div class="field-grid">
+<label>Student Name<input id="student" placeholder="Enter student name"></label>
+<label>YES Company<input id="company" placeholder="Enter company name"></label>
+</div>
+<label style="margin-top:12px">Product Description<input id="product" placeholder="Enter product description"></label>
 
-  <h2>2. Upload files</h2>
-  <div class="drop" id="drop">
-    <div style="font-size:36px">📄</div>
-    <strong>Drag and drop your files here</strong>
-    <p>Or click to browse your computer.</p>
-    <p>Accepted: PDF, PNG, JPG, JPEG and PPTX</p>
-    <button type="button" class="secondary" id="browse">Choose files</button>
-  </div>
-  <input id="fileInput" type="file"
-    accept=".pdf,.png,.jpg,.jpeg,.pptx,application/pdf,image/png,image/jpeg,application/vnd.openxmlformats-officedocument.presentationml.presentation"
-    multiple>
+<h2>2. Upload files</h2>
+<div class="drop" id="drop">
+<div style="font-size:36px">📄</div>
+<strong>Drag and drop your files here</strong>
+<p>Or click to browse your computer.</p>
+<p>Accepted: PDF, PNG, JPG, JPEG and PPTX</p>
+<button type="button" class="secondary" id="browse">Choose files</button>
+</div>
+<input id="fileInput" type="file" accept=".pdf,.png,.jpg,.jpeg,.pptx,application/pdf,image/png,image/jpeg,application/vnd.openxmlformats-officedocument.presentationml.presentation" multiple>
 
-  <h2>Your uploaded files</h2>
-  <p class="muted">Select the correct section for each file. Files are sorted into
-  the required moderation order automatically. Unassigned files will not be included
-  in the final portfolio.</p>
-  <div id="files"></div>
-  <div class="actions">
-    <button class="secondary" id="clear">Clear all files</button>
-  </div>
+<h2>Your uploaded files</h2>
+<p class="muted">Select the correct section for each file. Files are sorted into the required moderation order automatically. Unassigned files will not be included in the final portfolio.</p>
+<div id="files"></div>
+<div class="actions"><button class="secondary" id="clear">Clear all files</button></div>
 
-  <h2>3. Grade entry</h2>
-  <p>Enter your grades manually. They will appear in the final PDF.
-  Leave a field blank if you have not decided on that grade yet.</p>
-  <div class="field-grid">
-    <label>Business Plan Grade
-      <input id="businessGrade" placeholder="Enter grade">
-    </label>
-    <label>Individual Evaluation Grade
-      <input id="individualGrade" placeholder="Enter grade">
-    </label>
-    <label>Overall Grade
-      <input id="overallGrade" placeholder="Enter grade">
-    </label>
-  </div>
+<h2>3. Grade entry</h2>
+<p>Enter your grades manually. They will appear in the final PDF. Leave a field blank if you have not decided on that grade yet.</p>
+<div class="field-grid">
+<label>Business Plan Grade<input id="businessGrade" placeholder="Enter grade"></label>
+<label>Individual Evaluation Grade<input id="individualGrade" placeholder="Enter grade"></label>
+<label>Overall Grade<input id="overallGrade" placeholder="Enter grade"></label>
+</div>
 
-  <h2>4. YES comments and feedback</h2>
-  <p>Paste the YES feedback/comments for each challenge into the relevant box.
-  Any comments entered here will be added as a clearly labelled page immediately
-  after that challenge's uploaded documents in the final PDF.</p>
+<h2>4. YES comments and challenge marks</h2>
+<p>Enter each challenge's numerical mark and paste the YES comments. Marks and comments will appear directly after the relevant challenge documents in the PDF.</p>
+<div class="comments-grid">
+<div class="comment-card">
+<label>Challenge 1 — Validation and Planning Mark (out of 20)
+<input id="mark1" type="number" min="0" max="20" step="1" placeholder="Enter mark out of 20"></label>
+<label>YES Comments<textarea id="comments1" rows="5" placeholder="Paste YES comments for Challenge 1 here..."></textarea></label>
+</div>
+<div class="comment-card">
+<label>Challenge 2 — Pitch Mark (out of 30)
+<input id="mark2" type="number" min="0" max="30" step="1" placeholder="Enter mark out of 30"></label>
+<label>YES Comments<textarea id="comments2" rows="5" placeholder="Paste YES comments for Challenge 2 here..."></textarea></label>
+</div>
+<div class="comment-card">
+<label>Challenge 3 — Promotion and Marketing Mark (out of 20)
+<input id="mark3" type="number" min="0" max="20" step="1" placeholder="Enter mark out of 20"></label>
+<label>YES Comments<textarea id="comments3" rows="5" placeholder="Paste YES comments for Challenge 3 here..."></textarea></label>
+</div>
+<div class="comment-card">
+<label>Challenge 4 — Achievements and Reflections Mark (out of 30)
+<input id="mark4" type="number" min="0" max="30" step="1" placeholder="Enter mark out of 30"></label>
+<label>YES Comments<textarea id="comments4" rows="5" placeholder="Paste YES comments for Challenge 4 here..."></textarea></label>
+</div>
+</div>
 
-  <div class="comments-grid">
-    <label>Challenge 1 — Validation and Planning Comments
-      <textarea id="comments1" rows="5"
-        placeholder="Paste YES comments for Challenge 1 here..."></textarea>
-    </label>
-    <label>Challenge 2 — Pitch Comments
-      <textarea id="comments2" rows="5"
-        placeholder="Paste YES comments for Challenge 2 here..."></textarea>
-    </label>
-    <label>Challenge 3 — Promotion and Marketing Comments
-      <textarea id="comments3" rows="5"
-        placeholder="Paste YES comments for Challenge 3 here..."></textarea>
-    </label>
-    <label>Challenge 4 — Achievements and Reflections Comments
-      <textarea id="comments4" rows="5"
-        placeholder="Paste YES comments for Challenge 4 here..."></textarea>
-    </label>
-  </div>
-
-  <h2>5. Final document order</h2>
-  <div class="preview"><ol id="preview"></ol></div>
-
-  <h2>6. Generate moderation portfolio</h2>
-  <label>Output filename
-    <input id="outputName" value="YES_Moderation_Portfolio">
-  </label>
-  <div class="actions">
-    <button class="primary" id="merge">Generate Moderation PDF</button>
-  </div>
-  <p id="status" class="status" role="status"></p>
+<h2>5. Final document order</h2>
+<div class="preview"><ol id="preview"></ol></div>
+<h2>6. Generate moderation portfolio</h2>
+<label>Output filename<input id="outputName" value="YES_Moderation_Portfolio"></label>
+<div class="actions"><button class="primary" id="merge">Generate Moderation PDF</button></div>
+<p id="status" class="status" role="status"></p>
 </main>
 
 <script>
-const SECTION_GROUPS = [
-  {
-    title:"Business Planning",
-    sections:[
-      "Organisational Structure",
-      "LEAN Canvas",
-      "Challenge One (Validation + Planning)",
-      "Challenge Two (Pitch)"
-    ]
-  },
-  {
-    title:"Business Carry Out",
-    sections:[
-      "Challenge Three (Promotion and Marketing)",
-      "Challenge Four (Achievements)"
-    ]
-  },
-  {
-    title:"Business Evaluation",
-    sections:[
-      "Challenge Four (Group Reflections)",
-      "Individual Evaluation"
-    ]
-  }
+const SECTION_GROUPS=[
+{title:"Business Planning",sections:["Organisational Structure","LEAN Canvas","Challenge One (Validation + Planning)","Challenge Two (Pitch)"]},
+{title:"Business Carry Out",sections:["Challenge Three (Promotion and Marketing)","Challenge Four (Achievements)"]},
+{title:"Business Evaluation",sections:["Challenge Four (Group Reflections)","Individual Evaluation"]}
 ];
+const sections=SECTION_GROUPS.flatMap(group=>group.sections);
+const files=[];
+const $=id=>document.getElementById(id);
+const drop=$("drop");
+const input=$("fileInput");
+const SUPPORTED_FILE=/\.(pdf|png|jpe?g|pptx)$/i;
 
-const sections = SECTION_GROUPS.flatMap(group => group.sections);
-const files = [];
-const $ = id => document.getElementById(id);
-const drop = $("drop");
-const input = $("fileInput");
-const SUPPORTED_FILE = /\.(pdf|png|jpe?g|pptx)$/i;
+$("browse").onclick=()=>input.click();
+drop.onclick=event=>{if(event.target.closest("button"))return;input.click()};
+["dragenter","dragover"].forEach(event=>drop.addEventListener(event,e=>{e.preventDefault();drop.classList.add("over")}));
+["dragleave","drop"].forEach(event=>drop.addEventListener(event,e=>{e.preventDefault();drop.classList.remove("over")}));
+drop.addEventListener("drop",e=>addFiles(e.dataTransfer.files));
+input.addEventListener("change",()=>{addFiles(input.files);input.value=""});
 
-$("browse").onclick = () => input.click();
-drop.onclick = event => {
-  if (event.target.closest("button")) return;
-  input.click();
-};
+function guessSection(name){
+const n=name.toLowerCase().replace(/[_-]+/g," ");
+if(n.includes("organisational structure")||n.includes("organizational structure")||n.includes("org structure"))return sections[0];
+if(n.includes("lean")||n.includes("canvas"))return sections[1];
+if(n.includes("challenge 1")||n.includes("challenge one")||n.includes("validation"))return sections[2];
+if(n.includes("challenge 2")||n.includes("challenge two")||n.includes("pitch"))return sections[3];
+if(n.includes("challenge 3")||n.includes("challenge three")||n.includes("promotion")||n.includes("marketing"))return sections[4];
+if(n.includes("group reflection"))return sections[6];
+if(n.includes("individual evaluation"))return sections[7];
+if(n.includes("achievement")||n.includes("challenge 4")||n.includes("challenge four"))return sections[5];
+return "";
+}
 
-["dragenter","dragover"].forEach(event => {
-  drop.addEventListener(event,e => {
-    e.preventDefault();
-    drop.classList.add("over");
-  });
+function addFiles(selectedFiles){
+let added=0,unsupported=0;
+for(const file of Array.from(selectedFiles)){
+if(!SUPPORTED_FILE.test(file.name)){unsupported++;continue}
+const duplicate=files.some(item=>item.file.name===file.name&&item.file.size===file.size&&item.file.lastModified===file.lastModified);
+if(duplicate)continue;
+files.push({file,section:guessSection(file.name)});added++;
+}
+render();
+let message=`${added} file(s) added.`;
+if(unsupported)message+=` ${unsupported} unsupported file(s) skipped.`;
+if(added)message+=" Check each section assignment.";
+else if(!unsupported)message="No new files added. They may already be uploaded.";
+$("status").textContent=message;
+}
+
+function fileTypeLabel(file){
+const name=file.name.toLowerCase();
+if(name.endsWith(".pdf"))return "PDF";
+if(name.endsWith(".png"))return "PNG image";
+if(/\.(jpg|jpeg)$/.test(name))return "JPEG image";
+if(name.endsWith(".pptx"))return "PowerPoint — convert to PDF first";
+return "Unknown format";
+}
+
+function render(){
+const container=$("files");container.replaceChildren();
+files.forEach((item,index)=>{
+const row=document.createElement("div");row.className="file";
+const name=document.createElement("div");name.className="filename";name.textContent="📄 "+item.file.name;
+const size=document.createElement("small");size.textContent=fileTypeLabel(item.file)+" · "+(item.file.size/1024/1024).toFixed(2)+" MB";name.appendChild(size);
+const select=document.createElement("select");
+const placeholder=document.createElement("option");placeholder.value="";placeholder.textContent="Choose a section...";select.appendChild(placeholder);
+sections.forEach(section=>{const option=document.createElement("option");option.value=section;option.textContent=section;select.appendChild(option)});
+select.value=item.section;
+select.onchange=()=>{item.section=select.value;renderPreview()};
+const remove=document.createElement("button");remove.className="danger";remove.textContent="Remove";
+remove.onclick=()=>{files.splice(index,1);render()};
+row.append(name,select,remove);container.appendChild(row);
 });
-["dragleave","drop"].forEach(event => {
-  drop.addEventListener(event,e => {
-    e.preventDefault();
-    drop.classList.remove("over");
-  });
+renderPreview();
+}
+
+function renderPreview(){
+const list=$("preview");list.replaceChildren();
+function add(text,level=0){const li=document.createElement("li");li.textContent=text;if(level)li.style.marginLeft="12px";list.appendChild(li)}
+add("Cover page: Student and company details");
+SECTION_GROUPS.forEach(group=>{
+add(group.title);
+group.sections.forEach(section=>{
+add(section);
+const assigned=files.filter(f=>f.section===section);
+if(!assigned.length)add("No file assigned yet",1);
+else assigned.forEach(f=>add(f.file.name,1));
+const mapping={"Challenge One (Validation + Planning)":1,"Challenge Two (Pitch)":2,"Challenge Three (Promotion and Marketing)":3,"Challenge Four (Achievements)":4};
+if(mapping[section]){
+const n=mapping[section];
+if($("mark"+n).value.trim()||$("comments"+n).value.trim())add(`YES feedback — Challenge ${n} (mark: ${$("mark"+n).value||"not entered"})`,1);
+}
 });
-drop.addEventListener("drop",e => addFiles(e.dataTransfer.files));
-input.addEventListener("change",() => {
-  addFiles(input.files);
-  input.value = "";
 });
-
-function guessSection(name) {
-  const n = name.toLowerCase().replace(/[_-]+/g," ");
-  if (n.includes("organisational structure") ||
-      n.includes("organizational structure") ||
-      n.includes("org structure")) return sections[0];
-  if (n.includes("lean") || n.includes("canvas")) return sections[1];
-  if (n.includes("challenge 1") || n.includes("challenge one") ||
-      n.includes("validation")) return sections[2];
-  if (n.includes("challenge 2") || n.includes("challenge two") ||
-      n.includes("pitch")) return sections[3];
-  if (n.includes("challenge 3") || n.includes("challenge three") ||
-      n.includes("promotion") || n.includes("marketing")) return sections[4];
-  if (n.includes("group reflection")) return sections[6];
-  if (n.includes("individual evaluation")) return sections[7];
-  if (n.includes("achievement") || n.includes("challenge 4") ||
-      n.includes("challenge four")) return sections[5];
-  return "";
+add("Grade Summary");
+add("Business Plan Grade: "+($("businessGrade").value||"Blank"),1);
+add("Individual Evaluation Grade: "+($("individualGrade").value||"Blank"),1);
+add("Overall Grade: "+($("overallGrade").value||"Blank"),1);
 }
 
-function addFiles(selectedFiles) {
-  let added = 0;
-  let unsupported = 0;
-  for (const file of Array.from(selectedFiles)) {
-    if (!SUPPORTED_FILE.test(file.name)) { unsupported++; continue; }
-    const duplicate = files.some(item =>
-      item.file.name === file.name &&
-      item.file.size === file.size &&
-      item.file.lastModified === file.lastModified
-    );
-    if (duplicate) continue;
-    files.push({file,section:guessSection(file.name)});
-    added++;
-  }
-  render();
-  let message = `${added} file(s) added.`;
-  if (unsupported) message += ` ${unsupported} unsupported file(s) skipped.`;
-  if (added) message += " Check each section assignment.";
-  else if (!unsupported) message = "No new files added. They may already be uploaded.";
-  $("status").textContent = message;
+["student","company","product","businessGrade","individualGrade","overallGrade","mark1","mark2","mark3","mark4","comments1","comments2","comments3","comments4"].forEach(id=>$(id).addEventListener("input",renderPreview));
+
+$("clear").onclick=()=>{files.length=0;render();$("status").textContent=""};
+
+function drawWrappedText(page,text,x,y,font,size,maxWidth){
+const words=String(text||"").split(/\s+/);let line="",currentY=y;
+for(const word of words){
+const test=line?line+" "+word:word;
+if(font.widthOfTextAtSize(test,size)>maxWidth&&line){
+page.drawText(line,{x,y:currentY,font,size});currentY-=size*1.5;line=word;
+}else line=test;
+}
+if(line)page.drawText(line,{x,y:currentY,font,size});
+return currentY-size*1.5;
 }
 
-function fileTypeLabel(file) {
-  const name = file.name.toLowerCase();
-  if (name.endsWith(".pdf")) return "PDF";
-  if (name.endsWith(".png")) return "PNG image";
-  if (/\.(jpg|jpeg)$/.test(name)) return "JPEG image";
-  if (name.endsWith(".pptx")) return "PowerPoint — convert to PDF first";
-  return "Unknown format";
+function addHeadingPage(pdf,title,font,bold){
+const page=pdf.addPage([595.28,841.89]);const {width,height}=page.getSize();
+page.drawText("YES BUSINESS PORTFOLIO",{x:55,y:height-70,size:11,font:bold,color:PDFLib.rgb(.75,.25,.45)});
+page.drawLine({start:{x:55,y:height-85},end:{x:width-55,y:height-85},thickness:1,color:PDFLib.rgb(.94,.68,.78)});
+drawWrappedText(page,title,55,height-160,bold,24,width-110);
+if($("student").value.trim())page.drawText("Student: "+$("student").value.trim(),{x:55,y:65,size:10,font});
+return page;
 }
 
-function render() {
-  const container = $("files");
-  container.replaceChildren();
-  files.forEach((item,index) => {
-    const row = document.createElement("div");
-    row.className = "file";
-    const name = document.createElement("div");
-    name.className = "filename";
-    name.textContent = "📄 " + item.file.name;
-    const size = document.createElement("small");
-    size.textContent = fileTypeLabel(item.file) + " · " +
-      (item.file.size / 1024 / 1024).toFixed(2) + " MB";
-    name.appendChild(size);
-
-    const select = document.createElement("select");
-    const placeholder = document.createElement("option");
-    placeholder.value = "";
-    placeholder.textContent = "Choose a section...";
-    select.appendChild(placeholder);
-    sections.forEach(section => {
-      const option = document.createElement("option");
-      option.value = section;
-      option.textContent = section;
-      select.appendChild(option);
-    });
-    select.value = item.section;
-    select.onchange = () => {
-      item.section = select.value;
-      renderPreview();
-    };
-
-    const remove = document.createElement("button");
-    remove.className = "danger";
-    remove.textContent = "Remove";
-    remove.onclick = () => { files.splice(index,1); render(); };
-    row.append(name,select,remove);
-    container.appendChild(row);
-  });
-  renderPreview();
+function addCommentPages(pdf,title,mark,maxMark,commentText,font,bold,studentName){
+const text=(commentText||"").trim();
+if(mark===""&&!text)return;
+const pageWidth=595.28,pageHeight=841.89,margin=55;
+let page,y;
+function newPage(){
+page=pdf.addPage([pageWidth,pageHeight]);
+page.drawText("YES FEEDBACK / COMMENTS",{x:margin,y:pageHeight-55,size:10,font:bold,color:PDFLib.rgb(.75,.25,.45)});
+page.drawLine({start:{x:margin,y:pageHeight-68},end:{x:pageWidth-margin,y:pageHeight-68},thickness:1,color:PDFLib.rgb(.94,.68,.78)});
+page.drawText(title,{x:margin,y:pageHeight-105,size:18,font:bold,color:PDFLib.rgb(.75,.25,.45)});
+y=pageHeight-135;
+if(studentName){page.drawText("Student: "+studentName,{x:margin,y,size:10,font});y-=28}
+if(mark!==""){
+page.drawRectangle({x:margin,y:y-26,width:180,height:38,color:PDFLib.rgb(1,.91,.95),borderColor:PDFLib.rgb(.85,.36,.55),borderWidth:1});
+page.drawText("CHALLENGE MARK: "+mark+" / "+maxMark,{x:margin+12,y:y-3,size:13,font:bold,color:PDFLib.rgb(.59,.16,.34)});
+y-=58;
+}
+if(text){page.drawText("YES COMMENTS",{x:margin,y,size:11,font:bold,color:PDFLib.rgb(.59,.16,.34)});y-=22}
+}
+newPage();
+if(!text)return;
+for(const paragraph of text.split(/\r?\n/)){
+if(!paragraph.trim()){y-=10;continue}
+let line="";
+for(const word of paragraph.trim().split(/\s+/)){
+const candidate=line?line+" "+word:word;
+if(font.widthOfTextAtSize(candidate,11)>pageWidth-margin*2&&line){
+if(y<65)newPage();
+page.drawText(line,{x:margin,y,size:11,font});y-=17;line=word;
+}else line=candidate;
+}
+if(line){if(y<65)newPage();page.drawText(line,{x:margin,y,size:11,font});y-=20}
+}
 }
 
-function renderPreview() {
-  const list = $("preview");
-  list.replaceChildren();
-  function add(text,level=0) {
-    const li = document.createElement("li");
-    li.textContent = text;
-    if (level) li.style.marginLeft = "12px";
-    list.appendChild(li);
-  }
-  add("Cover page: Student and company details");
-  SECTION_GROUPS.forEach(group => {
-    add(group.title);
-    group.sections.forEach(section => {
-      add(section);
-      const assigned = files.filter(f => f.section === section);
-      if (!assigned.length) add("No file assigned yet",1);
-      else assigned.forEach(f => add(f.file.name,1));
+async function createPortfolio(){
+if(!window.PDFLib)throw new Error("The PDF library did not load. Check your internet connection and reload.");
+const markLimits={mark1:20,mark2:30,mark3:20,mark4:30};
+for(const [id,maximum] of Object.entries(markLimits)){
+const field=$(id);
+if(field.value.trim()!==""){
+const value=Number(field.value);
+if(!Number.isInteger(value)||value<0||value>maximum)throw new Error(field.closest("label").textContent.trim()+` must be a whole number from 0 to ${maximum}.`);
+}
+}
+const assigned=files.filter(f=>f.section);
+if(!assigned.length)throw new Error("Assign at least one file to a section before generating.");
+const pptxFiles=assigned.filter(item=>item.file.name.toLowerCase().endsWith(".pptx"));
+if(pptxFiles.length)throw new Error("PowerPoint files need conversion before merging:\n"+pptxFiles.map(item=>"• "+item.file.name).join("\n")+"\n\nOpen each presentation in PowerPoint and export it as a PDF. Then remove the PPTX file and upload its PDF version.");
 
-      const commentMap = {
-        "Challenge One (Validation + Planning)":1,
-        "Challenge Two (Pitch)":2,
-        "Challenge Three (Promotion and Marketing)":3,
-        "Challenge Four (Achievements)":4
-      };
-      if (commentMap[section] &&
-          $("comments" + commentMap[section]) &&
-          $("comments" + commentMap[section]).value.trim()) {
-        add("YES Comments — Challenge " + commentMap[section],1);
-      }
-    });
-  });
-  add("Grade Summary");
-  add("Business Plan Grade: " + ($("businessGrade").value || "Blank"),1);
-  add("Individual Evaluation Grade: " + ($("individualGrade").value || "Blank"),1);
-  add("Overall Grade: " + ($("overallGrade").value || "Blank"),1);
+const pdf=await PDFLib.PDFDocument.create();
+const font=await pdf.embedFont(PDFLib.StandardFonts.Helvetica);
+const bold=await pdf.embedFont(PDFLib.StandardFonts.HelveticaBold);
+
+// COVER PAGE
+const cover=pdf.addPage([595.28,841.89]);const {width,height}=cover.getSize();
+cover.drawText("YES BUSINESS PORTFOLIO",{x:55,y:height-100,size:17,font:bold,color:PDFLib.rgb(.75,.25,.45)});
+cover.drawLine({start:{x:55,y:height-120},end:{x:width-55,y:height-120},thickness:1.5,color:PDFLib.rgb(.94,.68,.78)});
+let y=height-200;
+for(const [heading,value] of [["Student Name:",$("student").value],["YES Company:",$("company").value],["Product Description:",$("product").value]]){
+cover.drawText(heading,{x:55,y,size:13,font:bold});y-=25;
+y=drawWrappedText(cover,value.trim()||"________________",55,y,font,12,width-110)-30;
 }
 
-[
-  "student","company","product","businessGrade","individualGrade","overallGrade",
-  "comments1","comments2","comments3","comments4"
-].forEach(id => $(id).addEventListener("input",renderPreview));
+// SECTION HEADINGS AND CONTENT
+for(const group of SECTION_GROUPS){
+addHeadingPage(pdf,group.title,font,bold);
+for(const section of group.sections){
+const sectionFiles=assigned.filter(item=>item.section===section);
+for(let i=0;i<sectionFiles.length;i++){
+const item=sectionFiles[i],file=item.file,name=file.name.toLowerCase(),bytes=await file.arrayBuffer();
+if(name.endsWith(".pdf")){
+const source=await PDFLib.PDFDocument.load(bytes);
+const pages=await pdf.copyPages(source,source.getPageIndices());
+for(let pageIndex=0;pageIndex<pages.length;pageIndex++){
+const page=pages[pageIndex];
+if(i===0&&pageIndex===0){
+const {height}=page.getSize();
+page.drawText(section,{x:40,y:height-30,size:14,font:bold,color:PDFLib.rgb(.75,.25,.45)});
+}
+pdf.addPage(page);
+}
+}else if(name.endsWith(".png")||name.endsWith(".jpg")||name.endsWith(".jpeg")){
+const image=name.endsWith(".png")?await pdf.embedPng(bytes):await pdf.embedJpg(bytes);
+const pageWidth=595.28,pageHeight=841.89,margin=35,titleSpace=i===0?65:25;
+const availableWidth=pageWidth-margin*2,availableHeight=pageHeight-margin-titleSpace;
+const scale=Math.min(availableWidth/image.width,availableHeight/image.height);
+const imageWidth=image.width*scale,imageHeight=image.height*scale;
+const page=pdf.addPage([pageWidth,pageHeight]);
+if(i===0)page.drawText(section,{x:margin,y:pageHeight-30,size:14,font:bold,color:PDFLib.rgb(.75,.25,.45)});
+page.drawImage(image,{x:(pageWidth-imageWidth)/2,y:margin+(availableHeight-imageHeight)/2,width:imageWidth,height:imageHeight});
+}
+}
 
-$("clear").onclick = () => {
-  files.length = 0;
-  render();
-  $("status").textContent = "";
+const commentMap={
+"Challenge One (Validation + Planning)":[1,"Challenge 1 — Validation and Planning",20],
+"Challenge Two (Pitch)":[2,"Challenge 2 — Pitch",30],
+"Challenge Three (Promotion and Marketing)":[3,"Challenge 3 — Promotion and Marketing",20],
+"Challenge Four (Achievements)":[4,"Challenge 4 — Achievements and Reflections",30]
 };
-
-function drawWrappedText(page,text,x,y,font,size,maxWidth) {
-  const words = String(text || "").split(/\s+/);
-  let line = "";
-  let currentY = y;
-  for (const word of words) {
-    const test = line ? line + " " + word : word;
-    if (font.widthOfTextAtSize(test,size) > maxWidth && line) {
-      page.drawText(line,{x,y:currentY,font,size});
-      currentY -= size * 1.5;
-      line = word;
-    } else line = test;
-  }
-  if (line) page.drawText(line,{x,y:currentY,font,size});
-  return currentY - size * 1.5;
+if(commentMap[section]){
+const [n,title,maxMark]=commentMap[section];
+addCommentPages(pdf,title,$("mark"+n).value,maxMark,$("comments"+n).value,font,bold,$("student").value.trim());
+}
+}
 }
 
-function addHeadingPage(pdf,title,font,bold) {
-  const page = pdf.addPage([595.28,841.89]);
-  const {width,height} = page.getSize();
-  page.drawText("YES BUSINESS PORTFOLIO",{
-    x:55,y:height-70,size:11,font:bold,
-    color:PDFLib.rgb(0.75,0.25,0.45)
-  });
-  page.drawLine({
-    start:{x:55,y:height-85},end:{x:width-55,y:height-85},
-    thickness:1,color:PDFLib.rgb(0.94,0.68,0.78)
-  });
-  drawWrappedText(page,title,55,height-160,bold,24,width-110);
-  if ($("student").value.trim()) {
-    page.drawText("Student: " + $("student").value.trim(),{
-      x:55,y:65,size:10,font
-    });
-  }
-  return page;
+// GRADE SUMMARY
+const gradePage=pdf.addPage([595.28,841.89]);
+gradePage.drawText("GRADE SUMMARY",{x:55,y:760,size:23,font:bold});
+gradePage.drawText("Student: "+($("student").value.trim()||"________________"),{x:55,y:720,size:11,font});
+const grades=[
+{title:"Business Plan Grade",value:$("businessGrade").value},
+{title:"Individual Evaluation Grade",value:$("individualGrade").value},
+{title:"Overall Grade",value:$("overallGrade").value}
+];
+let gy=650;
+for(const grade of grades){
+gradePage.drawText(grade.title,{x:55,y:gy,size:14,font:bold});
+gradePage.drawRectangle({x:55,y:gy-55,width:485,height:38,borderWidth:1,borderColor:PDFLib.rgb(.65,.69,.74)});
+if(grade.value.trim())gradePage.drawText(grade.value.trim(),{x:68,y:gy-43,size:12,font});
+gy-=130;
 }
 
-function addCommentPages(pdf,title,commentText,font,bold,studentName) {
-  const text = (commentText || "").trim();
-  if (!text) return;
-
-  const pageWidth = 595.28;
-  const pageHeight = 841.89;
-  const margin = 55;
-  let page;
-  let y;
-
-  function newPage() {
-    page = pdf.addPage([pageWidth,pageHeight]);
-    page.drawText("YES FEEDBACK / COMMENTS",{
-      x:margin,y:pageHeight-55,size:10,font:bold,
-      color:PDFLib.rgb(0.75,0.25,0.45)
-    });
-    page.drawLine({
-      start:{x:margin,y:pageHeight-68},
-      end:{x:pageWidth-margin,y:pageHeight-68},
-      thickness:1,color:PDFLib.rgb(0.94,0.68,0.78)
-    });
-    page.drawText(title,{
-      x:margin,y:pageHeight-105,size:18,font:bold,
-      color:PDFLib.rgb(0.75,0.25,0.45)
-    });
-    y = pageHeight - 135;
-    if (studentName) {
-      page.drawText("Student: " + studentName,{
-        x:margin,y,size:10,font
-      });
-      y -= 28;
-    }
-  }
-
-  newPage();
-  const paragraphs = text.split(/\r?\n/);
-  for (const paragraph of paragraphs) {
-    if (!paragraph.trim()) { y -= 10; continue; }
-    const words = paragraph.trim().split(/\s+/);
-    let line = "";
-    for (const word of words) {
-      const candidate = line ? line + " " + word : word;
-      if (font.widthOfTextAtSize(candidate,11) > pageWidth-margin*2 && line) {
-        if (y < 65) newPage();
-        page.drawText(line,{x:margin,y,size:11,font});
-        y -= 17;
-        line = word;
-      } else line = candidate;
-    }
-    if (line) {
-      if (y < 65) newPage();
-      page.drawText(line,{x:margin,y,size:11,font});
-      y -= 20;
-    }
-  }
+// DOWNLOAD
+const output=await pdf.save();
+const blob=new Blob([output],{type:"application/pdf"});
+const url=URL.createObjectURL(blob);
+const link=document.createElement("a");
+const baseName=$("outputName").value.trim()||"YES_Moderation_Portfolio";
+link.href=url;
+link.download=baseName.toLowerCase().endsWith(".pdf")?baseName:baseName+".pdf";
+link.click();
+setTimeout(()=>URL.revokeObjectURL(url),3000);
 }
 
-async function createPortfolio() {
-  if (!window.PDFLib) {
-    throw new Error("The PDF library did not load. Check your internet connection and reload.");
-  }
-  const assigned = files.filter(f => f.section);
-  if (!assigned.length) {
-    throw new Error("Assign at least one file to a section before generating.");
-  }
-
-  const pptxFiles = assigned.filter(item =>
-    item.file.name.toLowerCase().endsWith(".pptx")
-  );
-  if (pptxFiles.length) {
-    throw new Error(
-      "PowerPoint files need conversion before merging:\n" +
-      pptxFiles.map(item => "• " + item.file.name).join("\n") +
-      "\n\nOpen each presentation in PowerPoint and export it as a PDF. " +
-      "Then remove the PPTX file and upload its PDF version."
-    );
-  }
-
-  const pdf = await PDFLib.PDFDocument.create();
-  const font = await pdf.embedFont(PDFLib.StandardFonts.Helvetica);
-  const bold = await pdf.embedFont(PDFLib.StandardFonts.HelveticaBold);
-
-  // COVER PAGE
-  const cover = pdf.addPage([595.28,841.89]);
-  const {width,height} = cover.getSize();
-  cover.drawText("YES BUSINESS PORTFOLIO",{
-    x:55,y:height-100,size:17,font:bold,
-    color:PDFLib.rgb(0.75,0.25,0.45)
-  });
-  cover.drawLine({
-    start:{x:55,y:height-120},end:{x:width-55,y:height-120},
-    thickness:1.5,color:PDFLib.rgb(0.94,0.68,0.78)
-  });
-
-  let y = height - 200;
-  const details = [
-    ["Student Name:",$("student").value],
-    ["YES Company:",$("company").value],
-    ["Product Description:",$("product").value]
-  ];
-  for (const [heading,value] of details) {
-    cover.drawText(heading,{x:55,y,size:13,font:bold});
-    y -= 25;
-    y = drawWrappedText(
-      cover,value.trim() || "________________",
-      55,y,font,12,width-110
-    ) - 30;
-  }
-
-  // SECTION HEADINGS AND CONTENT
-  for (const group of SECTION_GROUPS) {
-    addHeadingPage(pdf,group.title,font,bold);
-    for (const section of group.sections) {
-      const sectionFiles = assigned.filter(item => item.section === section);
-
-      for (let i=0;i<sectionFiles.length;i++) {
-        const item = sectionFiles[i];
-        const file = item.file;
-        const name = file.name.toLowerCase();
-        const bytes = await file.arrayBuffer();
-
-        if (name.endsWith(".pdf")) {
-          const source = await PDFLib.PDFDocument.load(bytes);
-          const pages = await pdf.copyPages(source,source.getPageIndices());
-
-          for (let pageIndex=0;pageIndex<pages.length;pageIndex++) {
-            const page = pages[pageIndex];
-            if (i===0 && pageIndex===0) {
-              const {height} = page.getSize();
-              page.drawText(section,{
-                x:40,y:height-30,size:14,font:bold,
-                color:PDFLib.rgb(0.75,0.25,0.45)
-              });
-            }
-            pdf.addPage(page);
-          }
-        } else if (
-          name.endsWith(".png") || name.endsWith(".jpg") ||
-          name.endsWith(".jpeg")
-        ) {
-          let image;
-          if (name.endsWith(".png")) image = await pdf.embedPng(bytes);
-          else image = await pdf.embedJpg(bytes);
-
-          const pageWidth = 595.28;
-          const pageHeight = 841.89;
-          const margin = 35;
-          const titleSpace = i===0 ? 65 : 25;
-          const availableWidth = pageWidth - margin*2;
-          const availableHeight = pageHeight - margin - titleSpace;
-          const scale = Math.min(
-            availableWidth/image.width,
-            availableHeight/image.height
-          );
-          const imageWidth = image.width*scale;
-          const imageHeight = image.height*scale;
-          const page = pdf.addPage([pageWidth,pageHeight]);
-
-          if (i===0) {
-            page.drawText(section,{
-              x:margin,y:pageHeight-30,size:14,font:bold,
-              color:PDFLib.rgb(0.75,0.25,0.45)
-            });
-          }
-          page.drawImage(image,{
-            x:(pageWidth-imageWidth)/2,
-            y:margin+(availableHeight-imageHeight)/2,
-            width:imageWidth,height:imageHeight
-          });
-        }
-      }
-
-      // Add each challenge's YES comments immediately after its documents.
-      const commentBySection = {
-        "Challenge One (Validation + Planning)":[1,"Challenge 1 — Validation and Planning"],
-        "Challenge Two (Pitch)":[2,"Challenge 2 — Pitch"],
-        "Challenge Three (Promotion and Marketing)":[3,"Challenge 3 — Promotion and Marketing"],
-        "Challenge Four (Achievements)":[4,"Challenge 4 — Achievements and Reflections"]
-      };
-
-      if (commentBySection[section]) {
-        const [number,title] = commentBySection[section];
-        addCommentPages(
-          pdf,title,$("comments"+number).value,
-          font,bold,$("student").value.trim()
-        );
-      }
-    }
-  }
-
-  // GRADE SUMMARY
-  const gradePage = pdf.addPage([595.28,841.89]);
-  gradePage.drawText("GRADE SUMMARY",{
-    x:55,y:760,size:23,font:bold
-  });
-  gradePage.drawText(
-    "Student: " + ($("student").value.trim() || "________________"),
-    {x:55,y:720,size:11,font}
-  );
-
-  const grades = [
-    {title:"Business Plan Grade",value:$("businessGrade").value},
-    {title:"Individual Evaluation Grade",value:$("individualGrade").value},
-    {title:"Overall Grade",value:$("overallGrade").value}
-  ];
-  let gy = 650;
-  for (const grade of grades) {
-    gradePage.drawText(grade.title,{
-      x:55,y:gy,size:14,font:bold
-    });
-    gradePage.drawRectangle({
-      x:55,y:gy-55,width:485,height:38,
-      borderWidth:1,borderColor:PDFLib.rgb(0.65,0.69,0.74)
-    });
-    const value = grade.value.trim();
-    if (value) {
-      gradePage.drawText(value,{
-        x:68,y:gy-43,size:12,font
-      });
-    }
-    gy -= 130;
-  }
-
-  const output = await pdf.save();
-  const blob = new Blob([output],{type:"application/pdf"});
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  const baseName = $("outputName").value.trim() || "YES_Moderation_Portfolio";
-  link.href = url;
-  link.download = baseName.toLowerCase().endsWith(".pdf") ? baseName : baseName + ".pdf";
-  link.click();
-  setTimeout(() => URL.revokeObjectURL(url),3000);
-}
-
-$("merge").onclick = async () => {
-  $("merge").disabled = true;
-  $("status").textContent = "Building your moderation portfolio...";
-  try {
-    await createPortfolio();
-    $("status").textContent = "Portfolio generated. Check your downloads folder.";
-  } catch (error) {
-    console.error(error);
-    $("status").textContent = "Error: " + error.message;
-  } finally {
-    $("merge").disabled = false;
-  }
+$("merge").onclick=async()=>{
+$("merge").disabled=true;
+$("status").textContent="Building your moderation portfolio...";
+try{
+await createPortfolio();
+$("status").textContent="Portfolio generated. Check your downloads folder.";
+}catch(error){
+console.error(error);
+$("status").textContent="Error: "+error.message;
+}finally{$("merge").disabled=false}
 };
-
 render();
 </script>
 </body>
