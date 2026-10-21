@@ -235,9 +235,10 @@ add("Grade Summary");
 add("Business Plan Grade: "+($("businessGrade").value||"Blank"),1);
 add("Individual Evaluation Grade: "+($("individualGrade").value||"Blank"),1);
 add("Overall Grade: "+($("overallGrade").value||"Blank"),1);
+add("Teacher Comment: "+($("teacherComment").value.trim()||"Blank"),1);
 }
 
-["student","company","product","businessGrade","individualGrade","overallGrade","mark1","mark2","mark3","mark4","comments1","comments2","comments3","comments4"].forEach(id=>$(id).addEventListener("input",renderPreview));
+["student","company","product","businessGrade","individualGrade","overallGrade","teacherComment","mark1","mark2","mark3","mark4","comments1","comments2","comments3","comments4"].forEach(id=>$(id).addEventListener("input",renderPreview));
 
 $("clear").onclick=()=>{files.length=0;render();$("status").textContent=""};
 
