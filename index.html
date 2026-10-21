@@ -272,7 +272,8 @@ function newPage(){
 page=pdf.addPage([pageWidth,pageHeight]);
 page.drawText("YES FEEDBACK / COMMENTS",{x:margin,y:pageHeight-55,size:10,font:bold,color:PDFLib.rgb(.75,.25,.45)});
 page.drawLine({start:{x:margin,y:pageHeight-68},end:{x:pageWidth-margin,y:pageHeight-68},thickness:1,color:PDFLib.rgb(.94,.68,.78)});
-page.drawText(title,{x:margin,y:pageHeight-105,size:18,font:bold,color:PDFLib.rgb(.75,.25,.45)});
+page.drawRectangle({x:margin,y:pageHeight-118,width:pageWidth-margin*2,height:32,color:PDFLib.rgb(1,.91,.95),borderColor:PDFLib.rgb(.85,.36,.55),borderWidth:1});
+page.drawText(title,{x:margin+10,y:pageHeight-107,size:15,font:bold,color:PDFLib.rgb(.59,.16,.34)});
 y=pageHeight-135;
 if(studentName){page.drawText("Student: "+studentName,{x:margin,y,size:10,font});y-=28}
 if(mark!==""){
@@ -329,7 +330,7 @@ y=drawWrappedText(cover,value.trim()||"________________",55,y,font,12,width-110)
 
 // SECTION HEADINGS AND CONTENT
 for(const group of SECTION_GROUPS){
-addHeadingPage(pdf,group.title,font,bold);
+// Section titles are now attached to the first page of each assigned document.
 for(const section of group.sections){
 const sectionFiles=assigned.filter(item=>item.section===section);
 for(let i=0;i<sectionFiles.length;i++){
@@ -340,8 +341,10 @@ const pages=await pdf.copyPages(source,source.getPageIndices());
 for(let pageIndex=0;pageIndex<pages.length;pageIndex++){
 const page=pages[pageIndex];
 if(i===0&&pageIndex===0){
-const {height}=page.getSize();
-page.drawText(section,{x:40,y:height-30,size:14,font:bold,color:PDFLib.rgb(.75,.25,.45)});
+const {width,height}=page.getSize();
+const bannerHeight=30;
+page.drawRectangle({x:24,y:height-bannerHeight-12,width:width-48,height:bannerHeight,color:PDFLib.rgb(1,.91,.95),borderColor:PDFLib.rgb(.85,.36,.55),borderWidth:1});
+page.drawText(section,{x:34,y:height-31,size:12,font:bold,color:PDFLib.rgb(.59,.16,.34),maxWidth:width-68});
 }
 pdf.addPage(page);
 }
@@ -352,7 +355,10 @@ const availableWidth=pageWidth-margin*2,availableHeight=pageHeight-margin-titleS
 const scale=Math.min(availableWidth/image.width,availableHeight/image.height);
 const imageWidth=image.width*scale,imageHeight=image.height*scale;
 const page=pdf.addPage([pageWidth,pageHeight]);
-if(i===0)page.drawText(section,{x:margin,y:pageHeight-30,size:14,font:bold,color:PDFLib.rgb(.75,.25,.45)});
+if(i===0){
+page.drawRectangle({x:margin,y:pageHeight-48,width:pageWidth-margin*2,height:30,color:PDFLib.rgb(1,.91,.95),borderColor:PDFLib.rgb(.85,.36,.55),borderWidth:1});
+page.drawText(section,{x:margin+10,y:pageHeight-38,size:12,font:bold,color:PDFLib.rgb(.59,.16,.34)});
+}
 page.drawImage(image,{x:(pageWidth-imageWidth)/2,y:margin+(availableHeight-imageHeight)/2,width:imageWidth,height:imageHeight});
 }
 }
@@ -370,118 +376,47 @@ addCommentPages(pdf,title,$("mark"+n).value,maxMark,$("comments"+n).value,font,b
 }
 }
 
-// GRADE SUMMARY
+// GRADE SUMMARY + TEACHER COMMENT ON THE SAME PAGE
 const gradePage=pdf.addPage([595.28,841.89]);
-gradePage.drawText("GRADE SUMMARY",{x:55,y:760,size:23,font:bold});
-gradePage.drawText("Student: "+($("student").value.trim()||"________________"),{x:55,y:720,size:11,font});
+const {width:gradeWidth,height:gradeHeight}=gradePage.getSize();
+gradePage.drawRectangle({x:40,y:gradeHeight-85,width:gradeWidth-80,height:42,color:PDFLib.rgb(1,.91,.95),borderColor:PDFLib.rgb(.85,.36,.55),borderWidth:1});
+gradePage.drawText("GRADE SUMMARY",{x:55,y:gradeHeight-70,size:21,font:bold,color:PDFLib.rgb(.59,.16,.34)});
+gradePage.drawText("Student: "+($("student").value.trim()||"________________"),{x:55,y:gradeHeight-110,size:11,font});
 const grades=[
 {title:"Business Plan Grade",value:$("businessGrade").value},
 {title:"Individual Evaluation Grade",value:$("individualGrade").value},
 {title:"Overall Grade",value:$("overallGrade").value}
 ];
-let gy=650;
+let gy=gradeHeight-150;
 for(const grade of grades){
-gradePage.drawText(grade.title,{x:55,y:gy,size:14,font:bold});
-gradePage.drawRectangle({x:55,y:gy-55,width:485,height:38,borderWidth:1,borderColor:PDFLib.rgb(.65,.69,.74)});
-if(grade.value.trim())gradePage.drawText(grade.value.trim(),{x:68,y:gy-43,size:12,font});
-gy-=130;
+gradePage.drawText(grade.title,{x:55,y:gy,size:13,font:bold});
+gradePage.drawRectangle({x:55,y:gy-42,width:485,height:29,borderWidth:1,borderColor:PDFLib.rgb(.65,.69,.74)});
+if(grade.value.trim())gradePage.drawText(grade.value.trim(),{x:68,y:gy-32,size:12,font});
+gy-=83;
 }
 
-  // TEACHER COMMENT PAGE
-const teacherComment = $("teacherComment").value.trim();
-
-if (teacherComment) {
-  let commentPage = pdf.addPage([595.28, 841.89]);
-  const { height } = commentPage.getSize();
-
-  commentPage.drawText("TEACHER COMMENT", {
-    x: 55,
-    y: height - 65,
-    size: 20,
-    font: bold,
-    color: PDFLib.rgb(0.75, 0.25, 0.45)
-  });
-
-  commentPage.drawLine({
-    start: { x: 55, y: height - 80 },
-    end: { x: 540, y: height - 80 },
-    thickness: 1,
-    color: PDFLib.rgb(0.94, 0.68, 0.78)
-  });
-
-  let y = height - 115;
-  const maxWidth = 485;
-  const fontSize = 12;
-  const lineHeight = 18;
-
-  for (const paragraph of teacherComment.split(/\r?\n/)) {
-    if (!paragraph.trim()) {
-      y -= 10;
-      continue;
-    }
-
-    let line = "";
-
-    for (const word of paragraph.trim().split(/\s+/)) {
-      const candidate = line ? line + " " + word : word;
-
-      if (
-        font.widthOfTextAtSize(candidate, fontSize) > maxWidth &&
-        line
-      ) {
-        if (y < 55) {
-          commentPage = pdf.addPage([595.28, 841.89]);
-
-          commentPage.drawText("TEACHER COMMENT (CONTINUED)", {
-            x: 55,
-            y: 780,
-            size: 16,
-            font: bold,
-            color: PDFLib.rgb(0.75, 0.25, 0.45)
-          });
-
-          y = 745;
-        }
-
-        commentPage.drawText(line, {
-          x: 55,
-          y,
-          size: fontSize,
-          font
-        });
-
-        y -= lineHeight;
-        line = word;
-      } else {
-        line = candidate;
-      }
-    }
-
-    if (line) {
-      if (y < 55) {
-        commentPage = pdf.addPage([595.28, 841.89]);
-
-        commentPage.drawText("TEACHER COMMENT (CONTINUED)", {
-          x: 55,
-          y: 780,
-          size: 16,
-          font: bold,
-          color: PDFLib.rgb(0.75, 0.25, 0.45)
-        });
-
-        y = 745;
-      }
-
-      commentPage.drawText(line, {
-        x: 55,
-        y,
-        size: fontSize,
-        font
-      });
-
-      y -= lineHeight;
-    }
-  }
+// Teacher comment sits below the grades on this same page, wrapping neatly.
+const teacherComment=$("teacherComment").value.trim();
+gradePage.drawRectangle({x:40,y:gy-12,width:gradeWidth-80,height:30,color:PDFLib.rgb(1,.91,.95),borderColor:PDFLib.rgb(.85,.36,.55),borderWidth:1});
+gradePage.drawText("TEACHER COMMENT",{x:55,y:gy-2,size:13,font:bold,color:PDFLib.rgb(.59,.16,.34)});
+let commentY=gy-38;
+const commentFontSize=11,commentLineHeight=16,maxCommentWidth=gradeWidth-110;
+for(const paragraph of (teacherComment||"No teacher comment entered.").split(/\\r?\\n/)){
+if(!paragraph.trim()){commentY-=8;continue;}
+let line="";
+for(const word of paragraph.trim().split(/\\s+/)){
+const candidate=line?line+" "+word:word;
+if(font.widthOfTextAtSize(candidate,commentFontSize)>maxCommentWidth&&line){
+if(commentY<45){break;}
+gradePage.drawText(line,{x:55,y:commentY,size:commentFontSize,font});
+commentY-=commentLineHeight;
+line=word;
+}else line=candidate;
+}
+if(line&&commentY>=45){
+gradePage.drawText(line,{x:55,y:commentY,size:commentFontSize,font});
+commentY-=commentLineHeight;
+}
 }
 
 // DOWNLOAD
