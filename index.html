@@ -86,7 +86,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 <h2>3. Grade entry</h2>
 <p>Enter your grades manually. They will appear in the final PDF. Leave a field blank if you have not decided on that grade yet.</p>
 <div class="field-grid">
-<label>Business Plan Grade<input id="businessGrade" placeholder="Enter grade"></label>
+<label>3.6 Business Plan Grade<input id="businessGrade" placeholder="Enter grade"></label>
 <label>Individual Evaluation Grade<input id="individualGrade" placeholder="Enter grade"></label>
 <label>Overall Grade<input id="overallGrade" placeholder="Enter grade"></label>
 </div>
@@ -384,6 +384,103 @@ gradePage.drawText(grade.title,{x:55,y:gy,size:14,font:bold});
 gradePage.drawRectangle({x:55,y:gy-55,width:485,height:38,borderWidth:1,borderColor:PDFLib.rgb(.65,.69,.74)});
 if(grade.value.trim())gradePage.drawText(grade.value.trim(),{x:68,y:gy-43,size:12,font});
 gy-=130;
+}
+
+  // TEACHER COMMENT PAGE
+const teacherComment = $("teacherComment").value.trim();
+
+if (teacherComment) {
+  let commentPage = pdf.addPage([595.28, 841.89]);
+  const { height } = commentPage.getSize();
+
+  commentPage.drawText("TEACHER COMMENT", {
+    x: 55,
+    y: height - 65,
+    size: 20,
+    font: bold,
+    color: PDFLib.rgb(0.75, 0.25, 0.45)
+  });
+
+  commentPage.drawLine({
+    start: { x: 55, y: height - 80 },
+    end: { x: 540, y: height - 80 },
+    thickness: 1,
+    color: PDFLib.rgb(0.94, 0.68, 0.78)
+  });
+
+  let y = height - 115;
+  const maxWidth = 485;
+  const fontSize = 12;
+  const lineHeight = 18;
+
+  for (const paragraph of teacherComment.split(/\r?\n/)) {
+    if (!paragraph.trim()) {
+      y -= 10;
+      continue;
+    }
+
+    let line = "";
+
+    for (const word of paragraph.trim().split(/\s+/)) {
+      const candidate = line ? line + " " + word : word;
+
+      if (
+        font.widthOfTextAtSize(candidate, fontSize) > maxWidth &&
+        line
+      ) {
+        if (y < 55) {
+          commentPage = pdf.addPage([595.28, 841.89]);
+
+          commentPage.drawText("TEACHER COMMENT (CONTINUED)", {
+            x: 55,
+            y: 780,
+            size: 16,
+            font: bold,
+            color: PDFLib.rgb(0.75, 0.25, 0.45)
+          });
+
+          y = 745;
+        }
+
+        commentPage.drawText(line, {
+          x: 55,
+          y,
+          size: fontSize,
+          font
+        });
+
+        y -= lineHeight;
+        line = word;
+      } else {
+        line = candidate;
+      }
+    }
+
+    if (line) {
+      if (y < 55) {
+        commentPage = pdf.addPage([595.28, 841.89]);
+
+        commentPage.drawText("TEACHER COMMENT (CONTINUED)", {
+          x: 55,
+          y: 780,
+          size: 16,
+          font: bold,
+          color: PDFLib.rgb(0.75, 0.25, 0.45)
+        });
+
+        y = 745;
+      }
+
+      commentPage.drawText(line, {
+        x: 55,
+        y,
+        size: fontSize,
+        font
+      });
+
+      y -= lineHeight;
+    }
+  }
 }
 
 // DOWNLOAD
