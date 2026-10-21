@@ -454,18 +454,20 @@ addCommentPages(pdf,title,$("mark"+n).value,maxMark,$("comments"+n).value,font,b
 }
 }
 
-// GRADE SUMMARY + TEACHER COMMENT ON THE SAME PAGE
+// AS3.6 STANDARD GRADING SUMMARY + TEACHER COMMENT ON THE SAME PAGE
 const gradePage=pdf.addPage([595.28,841.89]);
 const {width:gradeWidth,height:gradeHeight}=gradePage.getSize();
+// Make the standard and assessment context unmistakable before any grades appear.
 gradePage.drawRectangle({x:40,y:gradeHeight-85,width:gradeWidth-80,height:42,color:PDFLib.rgb(1,.91,.95),borderColor:PDFLib.rgb(.85,.36,.55),borderWidth:1});
-gradePage.drawText("GRADE SUMMARY",{x:55,y:gradeHeight-70,size:21,font:bold,color:PDFLib.rgb(.59,.16,.34)});
-gradePage.drawText("Student: "+($("student").value.trim()||"________________"),{x:55,y:gradeHeight-110,size:11,font});
+gradePage.drawText("AS3.6 STANDARD GRADING",{x:55,y:gradeHeight-70,size:20,font:bold,color:PDFLib.rgb(.59,.16,.34)});
+gradePage.drawText("GRADE SUMMARY",{x:55,y:gradeHeight-115,size:15,font:bold,color:PDFLib.rgb(.59,.16,.34)});
+gradePage.drawText("Student: "+($("student").value.trim()||"________________"),{x:55,y:gradeHeight-140,size:11,font});
 const grades=[
 {title:"Business Plan Grade",value:$("businessGrade").value},
 {title:"Individual Evaluation Grade",value:$("individualGrade").value},
 {title:"Overall Grade",value:$("overallGrade").value}
 ];
-let gy=gradeHeight-150;
+let gy=gradeHeight-175;
 for(const grade of grades){
 gradePage.drawText(grade.title,{x:55,y:gy,size:13,font:bold});
 gradePage.drawRectangle({x:55,y:gy-42,width:485,height:29,borderWidth:1,borderColor:PDFLib.rgb(.65,.69,.74)});
