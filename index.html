@@ -71,7 +71,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 <h2>1A. Upload title page</h2>
 <p>Upload the title page you want to appear as the very first page of the final portfolio. Accepted formats: PDF, PNG, JPG or JPEG. If you upload a PDF with multiple pages, only its first page will be used as the title page.</p>
 <div class="drop" id="titleDrop">
-  <div style="font-size:30px">🖼️</div>
+  <div style="font-size:30px">📸</div>
   <strong id="titlePageLabel">Choose a title page file</strong>
   <p>Click here to select your title page.</p>
   <button type="button" class="secondary" id="titleBrowse">Choose title page</button>
@@ -94,12 +94,12 @@ button:disabled{opacity:.5;cursor:not-allowed}
 <div id="files"></div>
 <div class="actions"><button class="secondary" id="clear">Clear all files</button></div>
 
-<h2>3. Grade entry</h2>
+<h2>3. AS3.6 Grade entry</h2>
 <p>Enter your grades manually. They will appear in the final PDF. Leave a field blank if you have not decided on that grade yet.</p>
 <div class="field-grid">
-<label>AS3.6 Business Plan Grade<input id="businessGrade" placeholder="Enter grade"></label>
+<label>Business Planning Grade<input id="businessGrade" placeholder="Enter grade"></label>
 <label>Individual Evaluation Grade<input id="individualGrade" placeholder="Enter grade"></label>
-<label>Overall Grade<input id="overallGrade" placeholder="Enter grade"></label>
+<label>AS3.6 Overall Grade<input id="overallGrade" placeholder="Enter grade"></label>
 </div>
 
 <h2>4. YES comments and challenge marks</h2>
@@ -168,7 +168,7 @@ $("titleDrop").onclick=event=>{if(event.target.closest("button"))return;titlePag
 titlePageInput.addEventListener("change",()=>{
   const file=titlePageInput.files[0];
   if(!file)return;
-  if(!/\\.(pdf|png|jpe?g)$/i.test(file.name)){
+  if(!/\.(pdf|png|jpe?g)$/i.test(file.name)){
     $("status").textContent="Title page must be a PDF, PNG, JPG or JPEG.";
     titlePageInput.value="";
     return;
@@ -255,6 +255,7 @@ function renderPreview(){
 const list=$("preview");list.replaceChildren();
 function add(text,level=0){const li=document.createElement("li");li.textContent=text;if(level)li.style.marginLeft="12px";list.appendChild(li)}
 add(titlePageFile ? "Uploaded title page (first page): "+titlePageFile.name : "Title page: upload required");
+add("Student details page (second page): student name, YES company and product description");
 SECTION_GROUPS.forEach(group=>{
 add(group.title);
 group.sections.forEach(section=>{
@@ -270,7 +271,7 @@ if($("mark"+n).value.trim()||$("comments"+n).value.trim())add(`YES feedback — 
 });
 });
 add("AS3.6 Grade Summary");
-add("Business Plan Grade: "+($("businessGrade").value||"Blank"),1);
+add("Business Planning Grade: "+($("businessGrade").value||"Blank"),1);
 add("Individual Evaluation Grade: "+($("individualGrade").value||"Blank"),1);
 add("AS3.6 Overall Grade: "+($("overallGrade").value||"Blank"),1);
 add("Overall Teacher Comment: "+($("teacherComment").value.trim()||"Blank"),1);
@@ -381,6 +382,31 @@ if(titleName.endsWith(".pdf")){
   });
 }
 
+// STUDENT DETAILS PAGE — always the second page, immediately after the uploaded title page.
+const detailsPage=pdf.addPage([595.28,841.89]);
+const {width:detailsWidth,height:detailsHeight}=detailsPage.getSize();
+const plum=PDFLib.rgb(.59,.16,.34);
+const palePink=PDFLib.rgb(1,.91,.95);
+const pinkBorder=PDFLib.rgb(.85,.36,.55);
+detailsPage.drawRectangle({
+  x:40,y:detailsHeight-105,width:detailsWidth-80,height:48,
+  color:palePink,borderColor:pinkBorder,borderWidth:1
+});
+detailsPage.drawText("STUDENT DETAILS",{
+  x:55,y:detailsHeight-87,size:22,font:bold,color:plum
+});
+let detailsY=detailsHeight-155;
+const detailItems=[
+  ["Student Name",$("student").value.trim()],
+  ["YES Company",$("company").value.trim()],
+  ["Product Description",$("product").value.trim()]
+];
+for(const [label,value] of detailItems){
+  detailsPage.drawText(label,{x:55,y:detailsY,size:13,font:bold,color:plum});
+  detailsY-=25;
+  detailsY=drawWrappedText(detailsPage,value||"Not provided",55,detailsY,font,12,detailsWidth-110)-34;
+}
+
 // SECTION HEADINGS AND CONTENT
 for(const group of SECTION_GROUPS){
 // Section titles are now attached to the first page of each assigned document.
@@ -433,11 +459,11 @@ addCommentPages(pdf,title,$("mark"+n).value,maxMark,$("comments"+n).value,font,b
 const gradePage=pdf.addPage([595.28,841.89]);
 const {width:gradeWidth,height:gradeHeight}=gradePage.getSize();
 gradePage.drawRectangle({x:40,y:gradeHeight-85,width:gradeWidth-80,height:42,color:PDFLib.rgb(1,.91,.95),borderColor:PDFLib.rgb(.85,.36,.55),borderWidth:1});
-gradePage.drawText("GRADE SUMMARY",{x:55,y:gradeHeight-70,size:21,font:bold,color:PDFLib.rgb(.59,.16,.34)});
+gradePage.drawText("AS3.6 GRADE SUMMARY",{x:55,y:gradeHeight-70,size:21,font:bold,color:PDFLib.rgb(.59,.16,.34)});
 gradePage.drawText("Student: "+($("student").value.trim()||"________________"),{x:55,y:gradeHeight-110,size:11,font});
 const grades=[
-{title:"Business Plan Grade",value:$("businessGrade").value},
-{title:"Individual Evaluation Grade",value:$("individualGrade").value},
+{title:"AS3.6 Business Plan Grade",value:$("businessGrade").value},
+{title:"AS3.6 Individual Evaluation Grade",value:$("individualGrade").value},
 {title:"AS3.6 Overall Grade",value:$("overallGrade").value}
 ];
 let gy=gradeHeight-150;
