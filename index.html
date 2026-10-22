@@ -311,7 +311,7 @@ page=pdf.addPage([pageWidth,pageHeight]);
 page.drawText("YES FEEDBACK / COMMENTS",{x:margin,y:pageHeight-55,size:10,font:bold,color:PDFLib.rgb(.75,.25,.45)});
 page.drawLine({start:{x:margin,y:pageHeight-68},end:{x:pageWidth-margin,y:pageHeight-68},thickness:1,color:PDFLib.rgb(.94,.68,.78)});
 page.drawRectangle({x:margin,y:pageHeight-118,width:pageWidth-margin*2,height:32,color:PDFLib.rgb(1,.91,.95),borderColor:PDFLib.rgb(.85,.36,.55),borderWidth:1});
-page.drawText(title,{x:margin+10,y:pageHeight-107,size:15,font:bold,color:PDFLib.rgb(.59,.16,.34)});
+page.drawText(title.startsWith("AS3.6")?title:"AS3.6 — "+title,{x:margin+10,y:pageHeight-107,size:15,font:bold,color:PDFLib.rgb(.59,.16,.34)});
 y=pageHeight-135;
 if(studentName){page.drawText("Student: "+studentName,{x:margin,y,size:10,font});y-=28}
 if(mark!==""){
@@ -391,7 +391,7 @@ detailsPage.drawRectangle({
   x:40,y:detailsHeight-105,width:detailsWidth-80,height:48,
   color:palePink,borderColor:pinkBorder,borderWidth:1
 });
-detailsPage.drawText("STUDENT DETAILS",{
+detailsPage.drawText("AS3.6 STUDENT DETAILS",{
   x:55,y:detailsHeight-87,size:22,font:bold,color:plum
 });
 let detailsY=detailsHeight-155;
@@ -422,7 +422,7 @@ if(i===0&&pageIndex===0){
 const {width,height}=page.getSize();
 const bannerHeight=30;
 page.drawRectangle({x:24,y:height-bannerHeight-12,width:width-48,height:bannerHeight,color:PDFLib.rgb(1,.91,.95),borderColor:PDFLib.rgb(.85,.36,.55),borderWidth:1});
-page.drawText(section,{x:34,y:height-31,size:12,font:bold,color:PDFLib.rgb(.59,.16,.34),maxWidth:width-68});
+page.drawText("AS3.6 — "+section,{x:34,y:height-31,size:12,font:bold,color:PDFLib.rgb(.59,.16,.34),maxWidth:width-68});
 }
 pdf.addPage(page);
 }
@@ -435,7 +435,7 @@ const imageWidth=image.width*scale,imageHeight=image.height*scale;
 const page=pdf.addPage([pageWidth,pageHeight]);
 if(i===0){
 page.drawRectangle({x:margin,y:pageHeight-48,width:pageWidth-margin*2,height:30,color:PDFLib.rgb(1,.91,.95),borderColor:PDFLib.rgb(.85,.36,.55),borderWidth:1});
-page.drawText(section,{x:margin+10,y:pageHeight-38,size:12,font:bold,color:PDFLib.rgb(.59,.16,.34)});
+page.drawText("AS3.6 — "+section,{x:margin+10,y:pageHeight-38,size:12,font:bold,color:PDFLib.rgb(.59,.16,.34)});
 }
 page.drawImage(image,{x:(pageWidth-imageWidth)/2,y:margin+(availableHeight-imageHeight)/2,width:imageWidth,height:imageHeight});
 }
@@ -460,7 +460,7 @@ const {width:gradeWidth,height:gradeHeight}=gradePage.getSize();
 // Make the standard and assessment context unmistakable before any grades appear.
 gradePage.drawRectangle({x:40,y:gradeHeight-85,width:gradeWidth-80,height:42,color:PDFLib.rgb(1,.91,.95),borderColor:PDFLib.rgb(.85,.36,.55),borderWidth:1});
 gradePage.drawText("AS3.6 STANDARD GRADING",{x:55,y:gradeHeight-70,size:20,font:bold,color:PDFLib.rgb(.59,.16,.34)});
-gradePage.drawText("GRADE SUMMARY",{x:55,y:gradeHeight-115,size:15,font:bold,color:PDFLib.rgb(.59,.16,.34)});
+gradePage.drawText("AS3.6 GRADE SUMMARY",{x:55,y:gradeHeight-115,size:15,font:bold,color:PDFLib.rgb(.59,.16,.34)});
 gradePage.drawText("Student: "+($("student").value.trim()||"________________"),{x:55,y:gradeHeight-140,size:11,font});
 const grades=[
 {title:"Business Plan Grade",value:$("businessGrade").value},
@@ -469,7 +469,7 @@ const grades=[
 ];
 let gy=gradeHeight-175;
 for(const grade of grades){
-gradePage.drawText(grade.title,{x:55,y:gy,size:13,font:bold});
+gradePage.drawText("AS3.6 "+grade.title,{x:55,y:gy,size:13,font:bold});
 gradePage.drawRectangle({x:55,y:gy-42,width:485,height:29,borderWidth:1,borderColor:PDFLib.rgb(.65,.69,.74)});
 if(grade.value.trim())gradePage.drawText(grade.value.trim(),{x:68,y:gy-32,size:12,font});
 gy-=83;
@@ -478,13 +478,13 @@ gy-=83;
 // Teacher comment sits below the grades on this same page, wrapping neatly.
 const teacherComment=$("teacherComment").value.trim();
 gradePage.drawRectangle({x:40,y:gy-12,width:gradeWidth-80,height:30,color:PDFLib.rgb(1,.91,.95),borderColor:PDFLib.rgb(.85,.36,.55),borderWidth:1});
-gradePage.drawText("TEACHER COMMENT",{x:55,y:gy-2,size:13,font:bold,color:PDFLib.rgb(.59,.16,.34)});
+gradePage.drawText("AS3.6 TEACHER COMMENT",{x:55,y:gy-2,size:13,font:bold,color:PDFLib.rgb(.59,.16,.34)});
 let commentY=gy-38;
 const commentFontSize=11,commentLineHeight=16,maxCommentWidth=gradeWidth-110;
-for(const paragraph of (teacherComment||"No teacher comment entered.").split(/\\r?\\n/)){
+for(const paragraph of (teacherComment||"No teacher comment entered.").split(/\r?\n/)){
 if(!paragraph.trim()){commentY-=8;continue;}
 let line="";
-for(const word of paragraph.trim().split(/\\s+/)){
+for(const word of paragraph.trim().split(/\s+/)){
 const candidate=line?line+" "+word:word;
 if(font.widthOfTextAtSize(candidate,commentFontSize)>maxCommentWidth&&line){
 if(commentY<45){break;}
