@@ -311,7 +311,7 @@ page=pdf.addPage([pageWidth,pageHeight]);
 page.drawText("YES FEEDBACK / COMMENTS",{x:margin,y:pageHeight-55,size:10,font:bold,color:PDFLib.rgb(.75,.25,.45)});
 page.drawLine({start:{x:margin,y:pageHeight-68},end:{x:pageWidth-margin,y:pageHeight-68},thickness:1,color:PDFLib.rgb(.94,.68,.78)});
 page.drawRectangle({x:margin,y:pageHeight-118,width:pageWidth-margin*2,height:32,color:PDFLib.rgb(1,.91,.95),borderColor:PDFLib.rgb(.85,.36,.55),borderWidth:1});
-page.drawText(title.startsWith("AS3.6")?title:"AS3.6 — "+title,{x:margin+10,y:pageHeight-107,size:15,font:bold,color:PDFLib.rgb(.59,.16,.34)});
+page.drawText(title,{x:margin+10,y:pageHeight-107,size:15,font:bold,color:PDFLib.rgb(.59,.16,.34)});
 y=pageHeight-135;
 if(studentName){page.drawText("Student: "+studentName,{x:margin,y,size:10,font});y-=28}
 if(mark!==""){
@@ -391,7 +391,7 @@ detailsPage.drawRectangle({
   x:40,y:detailsHeight-105,width:detailsWidth-80,height:48,
   color:palePink,borderColor:pinkBorder,borderWidth:1
 });
-detailsPage.drawText("AS3.6 STUDENT DETAILS",{
+detailsPage.drawText("STUDENT DETAILS",{
   x:55,y:detailsHeight-87,size:22,font:bold,color:plum
 });
 let detailsY=detailsHeight-155;
@@ -422,7 +422,7 @@ if(i===0&&pageIndex===0){
 const {width,height}=page.getSize();
 const bannerHeight=30;
 page.drawRectangle({x:24,y:height-bannerHeight-12,width:width-48,height:bannerHeight,color:PDFLib.rgb(1,.91,.95),borderColor:PDFLib.rgb(.85,.36,.55),borderWidth:1});
-page.drawText("AS3.6 — "+section,{x:34,y:height-31,size:12,font:bold,color:PDFLib.rgb(.59,.16,.34),maxWidth:width-68});
+page.drawText(section,{x:34,y:height-31,size:12,font:bold,color:PDFLib.rgb(.59,.16,.34),maxWidth:width-68});
 }
 pdf.addPage(page);
 }
@@ -435,7 +435,7 @@ const imageWidth=image.width*scale,imageHeight=image.height*scale;
 const page=pdf.addPage([pageWidth,pageHeight]);
 if(i===0){
 page.drawRectangle({x:margin,y:pageHeight-48,width:pageWidth-margin*2,height:30,color:PDFLib.rgb(1,.91,.95),borderColor:PDFLib.rgb(.85,.36,.55),borderWidth:1});
-page.drawText("AS3.6 — "+section,{x:margin+10,y:pageHeight-38,size:12,font:bold,color:PDFLib.rgb(.59,.16,.34)});
+page.drawText(section,{x:margin+10,y:pageHeight-38,size:12,font:bold,color:PDFLib.rgb(.59,.16,.34)});
 }
 page.drawImage(image,{x:(pageWidth-imageWidth)/2,y:margin+(availableHeight-imageHeight)/2,width:imageWidth,height:imageHeight});
 }
